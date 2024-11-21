@@ -1,1 +1,63 @@
 // Specific CSS for your home-page
+.btn-sucess-geg  {
+  color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.btn-sucess-geg:hover  {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+.padding-none {
+  padding: 0;
+}
+
+.margin-none {
+  margin: 0;
+}
+
+
+/* Estilo para o título da categoria */
+.category-title {
+  background-color: #f1f1f1; /* Fundo cinza claro */
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333; /* Cor do texto */
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+/* Estilo do painel da pesquisa */
+.bg-sessions {
+  background-color: #f7f7f7; /* Cor de fundo mais clara para o restante da página */
+}
+
+/* Estilo do container da pesquisa */
+.container {
+  background-color: #ffffff; /* Fundo branco para o formulário */
+  padding: 30px;
+  border-radius: 8px; /* Bordas arredondadas */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilos para o botão de envio */
+.btn-primary {
+  background-color: #007bff; /* Cor do fundo do botão */
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Cor mais escura quando passar o mouse */
+  border-color: #0056b3;
+}
+
+/* Melhorias nas labels das opções de resposta */
+.form-check-label {
+  font-size: 14px;
+  color: #555555;
+}

@@ -1,0 +1,76 @@
+<div class="bg-sessions">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-12">
+        <!-- Container principal -->
+        <div class="bg-white rounded p-3 shadow">
+
+          <!-- Cabeçalho da pesquisa -->
+          <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
+            <div class="col-10">
+              <h4 class="margin-none"><strong>Pesquisa Clima Organizacional 2024</strong></h4>
+              <p><strong>Aplicação:</strong> anualmente para colaboradores administrativos, operacionais e lideranças ativos há mais de 01 (um) mês.</p>
+            </div>
+            <div class="col-lg-2 padding-none" style="border: 2px solid #1a1a1a;">
+              <div class="padding-none">
+                <p class="text-center bgGreenTea" style="border-bottom: 2px solid #1a1a1a;"><strong>Vigência</strong></p>
+                <p class="text-center">01/11/2024</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulário de pesquisa -->
+          <%= form_with model: @survey, local: true do |form| %>
+
+            <% current_category = nil %> <!-- Variável para armazenar a categoria atual -->
+
+            <% @questions.each_with_index do |question, index| %>
+              <% category = question.text.split(' ')[0].split('.').first.to_i %>
+
+              <!-- Exibe o título da categoria com fundo cinza -->
+              <% if category != current_category %>
+                <h3 class="category-title"><%= "#{category} - #{@category_names[category]}" %></h3>
+                <% current_category = category %>
+              <% end %>
+
+              <div class="form-group">
+                <%= form.label "response#{index + 1}", "#{question.text}" %>
+
+                <!-- Opções de Resposta com Letras antes do Radio Button -->
+                <div class="form-check">
+                  <%= form.label "response#{index + 1}_A", "<strong>A.</strong> ".html_safe, class: "form-check-label" %>
+                  <%= form.radio_button "response#{index + 1}", "Concordo totalmente", class: "form-check-input" %>
+                  <%= form.label "response#{index + 1}", "Concordo totalmente", class: "form-check-label" %>
+                </div>
+                <div class="form-check">
+                  <%= form.label "response#{index + 1}_B", "<strong>B.</strong> ".html_safe, class: "form-check-label" %>
+                  <%= form.radio_button "response#{index + 1}", "Concordo", class: "form-check-input" %>
+                  <%= form.label "response#{index + 1}", "Concordo", class: "form-check-label" %>
+                </div>
+                <div class="form-check">
+                  <%= form.label "response#{index + 1}_C", "<strong>C.</strong> ".html_safe, class: "form-check-label" %>
+                  <%= form.radio_button "response#{index + 1}", "Discordo", class: "form-check-input" %>
+                  <%= form.label "response#{index + 1}", "Discordo", class: "form-check-label" %>
+                </div>
+                <div class="form-check">
+                  <%= form.label "response#{index + 1}_D", "<strong>D.</strong> ".html_safe, class: "form-check-label" %>
+                  <%= form.radio_button "response#{index + 1}", "Discordo totalmente", class: "form-check-input" %>
+                  <%= form.label "response#{index + 1}", "Discordo totalmente", class: "form-check-label" %>
+                </div>
+                <div class="form-check">
+                  <%= form.label "response#{index + 1}_E", "<strong>E.</strong> ".html_safe, class: "form-check-label" %>
+                  <%= form.radio_button "response#{index + 1}", "Não Aplicável", class: "form-check-input" %>
+                  <%= form.label "response#{index + 1}", "Não Aplicável", class: "form-check-label" %>
+                </div>
+              </div>
+            <% end %>
+
+            <div class="form-group">
+              <%= form.submit 'Enviar', class: 'btn btn-primary mt-3' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
