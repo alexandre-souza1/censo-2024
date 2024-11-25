@@ -6,6 +6,12 @@ Rails.application.routes.draw do
   # Rotas do formulário
   resources :surveys, only: [:new, :create]
 
+  resources :surveys do
+    collection do
+      get :export_csv
+    end
+  end
+
   # Rota para health check
   get "up" => "rails/health#show", as: :rails_health_check
 

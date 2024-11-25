@@ -3,9 +3,7 @@
     <div class="row">
       <div class="col-12">
         <!-- Container principal -->
-        <div class="bg-white rounded p-3 shadow">
-
-          <!-- Cabeçalho da pesquisa -->
+                  <!-- Cabeçalho da pesquisa -->
           <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
             <div class="col-10">
               <h4 class="margin-none"><strong>Pesquisa Clima Organizacional 2024</strong></h4>
@@ -18,59 +16,89 @@
               </div>
             </div>
           </div>
+        <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
+          <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
+            <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2024</strong></h4>
+            <br>
+          </div>
+          <div class="panel-body">
+          <br>
+          <div class="panel-heading" style="background: #efefef; border: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
+            <h4 class="text-body-2">Escala</h4>
+            <div class=" margin-none text-left"><strong>A)	Concordo totalmente</strong> - se você concorda em 100% da afirmativa</div>
+            <div class=" margin-none text-left"><strong>B)	Concordo</strong> - se você concorda com a afirmativa, mas não em 100%</div>
+            <div class=" margin-none text-left"><strong>C)	Discordo</strong> - se você discorda da afirmativa, mas não em 100%</div>
+            <div class=" margin-none text-left"><strong>D)	Discordo totalmente</strong> - se você discorda em 100% da afirmativa</div>
+            <div class=" margin-none text-left"><strong>E)	Não aplicável</strong> - se você não tem conhecimento acerca da afirmativa, uma vez que não se aplica ao seu contexto de trabalho.</div>
+            <br>
+        </div>
 
-          <!-- Formulário de pesquisa -->
           <%= form_with model: @survey, local: true do |form| %>
+            <%= form.hidden_field :code %>
 
-            <% current_category = nil %> <!-- Variável para armazenar a categoria atual -->
+            <!-- Loop sobre as perguntas, agrupadas por categoria -->
+            <% @grouped_questions.each do |category_number, questions| %>
+              <h3 class="category-title"><%= @category_names[category_number] %></h3>
 
-            <% @questions.each_with_index do |question, index| %>
-              <% category = question.text.split(' ')[0].split('.').first.to_i %>
+              <% questions.each_with_index do |question, index| %>
+                <div class="form-group">
+                  <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
 
-              <!-- Exibe o título da categoria com fundo cinza -->
-              <% if category != current_category %>
-                <h3 class="category-title"><%= "#{category} - #{@category_names[category]}" %></h3>
-                <% current_category = category %>
+                  <!-- Usar `fields_for` com respostas associadas -->
+                  <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+                    <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
+
+                    <!-- Respostas disponíveis -->
+                    <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
+                      <div class="form-check">
+                        <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                        <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                </div>
               <% end %>
-
-              <div class="form-group">
-                <%= form.label "response#{index + 1}", "#{question.text}" %>
-
-                <!-- Opções de Resposta com Letras antes do Radio Button -->
-                <div class="form-check">
-                  <%= form.label "response#{index + 1}_A", "<strong>A.</strong> ".html_safe, class: "form-check-label" %>
-                  <%= form.radio_button "response#{index + 1}", "Concordo totalmente", class: "form-check-input" %>
-                  <%= form.label "response#{index + 1}", "Concordo totalmente", class: "form-check-label" %>
-                </div>
-                <div class="form-check">
-                  <%= form.label "response#{index + 1}_B", "<strong>B.</strong> ".html_safe, class: "form-check-label" %>
-                  <%= form.radio_button "response#{index + 1}", "Concordo", class: "form-check-input" %>
-                  <%= form.label "response#{index + 1}", "Concordo", class: "form-check-label" %>
-                </div>
-                <div class="form-check">
-                  <%= form.label "response#{index + 1}_C", "<strong>C.</strong> ".html_safe, class: "form-check-label" %>
-                  <%= form.radio_button "response#{index + 1}", "Discordo", class: "form-check-input" %>
-                  <%= form.label "response#{index + 1}", "Discordo", class: "form-check-label" %>
-                </div>
-                <div class="form-check">
-                  <%= form.label "response#{index + 1}_D", "<strong>D.</strong> ".html_safe, class: "form-check-label" %>
-                  <%= form.radio_button "response#{index + 1}", "Discordo totalmente", class: "form-check-input" %>
-                  <%= form.label "response#{index + 1}", "Discordo totalmente", class: "form-check-label" %>
-                </div>
-                <div class="form-check">
-                  <%= form.label "response#{index + 1}_E", "<strong>E.</strong> ".html_safe, class: "form-check-label" %>
-                  <%= form.radio_button "response#{index + 1}", "Não Aplicável", class: "form-check-input" %>
-                  <%= form.label "response#{index + 1}", "Não Aplicável", class: "form-check-label" %>
-                </div>
-              </div>
             <% end %>
 
-            <div class="form-group">
-              <%= form.submit 'Enviar', class: 'btn btn-primary mt-3' %>
+            <!-- Botão para selecionar automaticamente todas as opções A -->
+            <div class="form-group mt-4">
+              <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A' %>
+            </div>
+
+            <!-- Pergunta com Escala de 0 a 10 -->
+            <h3 class="category-title">11 - NPS</h3>
+            <div class="form-group mt-4">
+              <%= form.label :recommendation_score, "11.1 - Em uma escala de 0 a 10, qual a probabilidade de você recomendar a empresa como um bom lugar para trabalhar?" %>
+              <%= form.select :recommendation_score, (0..10).to_a, {}, class: "form-select" %>
+            </div>
+
+            <!-- Pergunta com Campo de Texto -->
+            <div class="form-group mt-4">
+              <%= form.label :general_feedback, "11.2 - Descreva aqui quais as suas percepções gerais sobre a empresa e ações que precisam ser tomadas para que este seja um bom lugar para se trabalhar." %>
+              <%= form.text_area :general_feedback, rows: 5, class: "form-control" %>
+            </div>
+
+            <!-- Botão para enviar -->
+            <div class="form-group mt-4">
+              <%= form.submit 'Enviar', class: 'btn btn-primary' %>
             </div>
           <% end %>
+
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
+
+<script>
+  // JavaScript para selecionar todas as opções 'A' de todas as perguntas
+  document.getElementById('select_all_A').addEventListener('click', function() {
+    // Seleciona todos os botões de rádio com id começando com "response_" e marca a opção 'A' (primeira opção)
+    document.querySelectorAll('input[id^="response_"]').forEach(function(radioButton) {
+      if (radioButton.id.endsWith('_0')) { // '0' representa a opção 'A'
+        radioButton.checked = true;
+      }
+    });
+  });
+</script>
