@@ -12,6 +12,7 @@ class Survey < ApplicationRecord
 
   # Método que verifica se todas as respostas foram preenchidas
   def validate_all_responses
+    logger.debug("Checking answers: #{answers.inspect}")
     if answers.any? { |answer| answer.response.blank? }
       errors.add(:answers, "Todas as respostas devem ser preenchidas")
     end

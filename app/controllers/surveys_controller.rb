@@ -1,63 +1,79 @@
 class SurveysController < ApplicationController
   def new
-    @survey = Survey.new(code: params[:code]) # Inicializa a pesquisa com o código fornecido
-    @questions = Question.all # Carrega todas as perguntas
+    # Inicializa a pesquisa com o código fornecido (se aplicável)
+    @survey = Survey.new(code: params[:code])
+
+    # Carrega perguntas organizadas por categoria
+    @engagement_questions = Question.where(category: 'Engagement')
     @censo_questions = Question.where(category: 'Censo')
 
-    # Cria as respostas relacionadas às perguntas
-    @questions.each do |question|
-      @survey.answers.build(question: question)
+    # Cria respostas associadas para todas as perguntas
+    Question.all.each do |question|
+      @survey.answers.build(question: question, response: "") # Resposta inicial em branco
     end
 
-      # No controller, filtra as perguntas da categoria "Engagement"
-    @engagement_questions = @questions.select { |q| q.category == "Engagement" }
-
-    # Agora, agrupa as perguntas pelo primeiro número antes do ponto
-    @grouped_engagement_questions = @engagement_questions.group_by do |question|
-      question.text.split(".").first.to_i
-    end
-
-    # Ordena as categorias por número e as perguntas dentro de cada categoria por número
-    @grouped_censo_questions = @censo_questions.group_by do |question|
-      question.text.split(".").first.to_i  # Agrupando pelo número antes do ponto
-    end.sort.to_h
-
-    # Agora, dentro de cada categoria, ordena as perguntas de forma numérica com base no número completo (antes e depois do ponto)
-    @grouped_censo_questions.each do |category_number, questions|
-      @grouped_censo_questions[category_number] = questions.sort_by do |question|
-        question.text.split(".").map { |part| part.to_i }  # Divide em partes e converte cada parte para inteiro
-      end
-end
-
+    # Agrupa e ordena perguntas por categoria
+    @grouped_engagement_questions = group_and_sort_questions(@engagement_questions)
+    @grouped_censo_questions = group_and_sort_questions(@censo_questions)
   end
-
 
   def create
     @survey = Survey.new(survey_params)
-    @questions = Question.all
+
+    # Recarrega perguntas organizadas por categoria para renderização em caso de erro
+    @engagement_questions = Question.where(category: 'Engagement')
+    @censo_questions = Question.where(category: 'Censo')
+    @grouped_engagement_questions = group_and_sort_questions(@engagement_questions)
+    @grouped_censo_questions = group_and_sort_questions(@censo_questions)
+
+        # Certifique-se de formatar as respostas múltiplas como string separada por '-'
+        format_multiple_responses(@survey.answers)
 
     if @survey.save
       redirect_to root_path, notice: "Pesquisa salva com sucesso!"
     else
+      logger.debug(@survey.errors.full_messages)
       flash.now[:alert] = "Erro ao salvar a pesquisa. Verifique os campos."
       render :new
     end
   end
 
   def export_csv
-    @surveys = Survey.all
-    # Enviando o CSV gerado com codificação UTF-8
+    # Exporta os dados de pesquisas como CSV
     send_data Survey.to_csv, filename: "surveys-#{Date.today}.csv", type: 'text/csv; charset=utf-8'
   end
 
   private
 
   def survey_params
-    params.require(:survey).permit(
-      :code,
-      :recommendation_score,
-      :general_feedback,
-      answers_attributes: [:question_id, :response]
-    )
+    params.require(:survey).to_unsafe_h
+  end
+
+
+  # Método para agrupar e ordenar perguntas por categoria
+  def group_and_sort_questions(questions)
+    grouped = questions.group_by do |question|
+      # Extrai o número da categoria a partir do texto
+      question.text.split(".").first.to_i
+    end
+
+    # Ordena as chaves do agrupamento (número da categoria)
+    grouped.keys.sort.map do |key|
+      # Ordena as perguntas dentro de cada grupo
+      [
+        key,
+        grouped[key].sort_by do |question|
+          question.text.split(".").map(&:to_i) # Ordena numericamente pelo prefixo
+        end
+      ]
+    end.to_h # Retorna como hash ordenado
+  end
+
+  def format_multiple_responses(answers)
+    answers.each do |answer|
+      if answer.response.is_a?(Array)
+        answer.response = answer.response.join('- ')
+      end
+    end
   end
 end

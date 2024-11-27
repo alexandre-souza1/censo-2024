@@ -35,47 +35,47 @@
         </div>
 
           <%= form_with model: @survey, local: true do |form| %>
-            <%= form.hidden_field :code %>
+              <%= form.hidden_field :code %>
 
-          <% @grouped_engagement_questions.each do |category_number, questions| %>
-            <!-- Exibe o nome da categoria visual com base no número da categoria -->
-            <h3 class="category-title">
-              <%= case category_number
-                  when 1 then "LIDERANÇAS"
-                  when 2 then "SEGURANÇA"
-                  when 3 then "SERVIÇOS GERAIS"
-                  when 4 then "RECONHECIMENTO"
-                  when 5 then "TREINAMENTO E DESENVOLVIMENTO"
-                  when 6 then "PLANEJAMENTO (FÉRIAS E JORNADA)"
-                  when 7 then "REMUNERAÇÃO E BENEFÍCIOS"
-                  when 8 then "PERTENCIMENTO"
-                  when 9 then "COMUNICAÇÃO"
-                  when 10 then "SEGURANÇA PSICOLÓGICA"
-                  else "CATEGORIA DESCONHECIDA"
-                  end
-              %>
-            </h3>
+              <% @grouped_engagement_questions.each do |category_number, questions| %>
+                <!-- Exibe o nome da categoria visual com base no número da categoria -->
+                <h3 class="category-title">
+                  <%= case category_number
+                      when 1 then "LIDERANÇAS"
+                      when 2 then "SEGURANÇA"
+                      when 3 then "SERVIÇOS GERAIS"
+                      when 4 then "RECONHECIMENTO"
+                      when 5 then "TREINAMENTO E DESENVOLVIMENTO"
+                      when 6 then "PLANEJAMENTO (FÉRIAS E JORNADA)"
+                      when 7 then "REMUNERAÇÃO E BENEFÍCIOS"
+                      when 8 then "PERTENCIMENTO"
+                      when 9 then "COMUNICAÇÃO"
+                      when 10 then "SEGURANÇA PSICOLÓGICA"
+                      else "CATEGORIA DESCONHECIDA"
+                      end
+                  %>
+                </h3>
 
-            <!-- Exibe as perguntas dentro de cada categoria -->
-            <% questions.each_with_index do |question, index| %>
-              <div class="form-group">
-                <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
+                <!-- Exibe as perguntas dentro de cada categoria -->
+                <% questions.each_with_index do |question, index| %>
+                  <div class="form-group">
+                    <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
 
-                <!-- Usar `fields_for` com respostas associadas -->
-                <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
-                  <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
+                    <!-- Usar `fields_for` com respostas associadas -->
+                    <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+                      <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
 
-                  <!-- Respostas disponíveis -->
-                  <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
-                    <div class="form-check">
-                      <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
-                      <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                    </div>
-                  <% end %>
+                      <!-- Respostas disponíveis -->
+                      <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
+                        <div class="form-check">
+                          <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                          <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </div>
                 <% end %>
-              </div>
-            <% end %>
-          <% end %>
+              <% end %>
 
 
             <!-- Botão para selecionar automaticamente todas as opções A -->
@@ -116,44 +116,66 @@
             <br>
           </div>
 
-          <% @grouped_censo_questions.each do |category_number, questions| %>
-            <!-- Exibe o nome da categoria visual com base no número da categoria -->
-            <h3 class="category-title">
-            <%= case category_number
-                when 1 then "DADOS INICIAIS"
-                when 2 then "ESCOLARIDADE"
-                when 3 then "ORIGEM"
-                when 4 then "MORADIA"
-                when 5 then "AUTENTICIDADE"
-                when 6 then "RENDA"
-                when 7 then "DIVERSIDADE E INCLUSÃO"
-                when 8 then "SAÚDE E SEGURANÇA OCUPACIONAL"
-                when 9 then "TRANSPORTE"
-                else "CATEGORIA DESCONHECIDA"
-                end
-            %>
-            </h3>
+            <% @grouped_censo_questions.each do |category_number, questions| %>
+              <!-- Exibe o nome da categoria visual com base no número da categoria -->
+              <h3 class="category-title">
+                <%= case category_number
+                    when 1 then "DADOS INICIAIS"
+                    when 2 then "ESCOLARIDADE"
+                    when 3 then "ORIGEM"
+                    when 4 then "MORADIA"
+                    when 5 then "AUTENTICIDADE"
+                    when 6 then "RENDA"
+                    when 7 then "DIVERSIDADE E INCLUSÃO"
+                    when 8 then "SAÚDE E SEGURANÇA OCUPACIONAL"
+                    when 9 then "TRANSPORTE"
+                    else "CATEGORIA DESCONHECIDA"
+                    end
+                %>
+              </h3>
 
-            <!-- Exibe as perguntas dentro de cada categoria -->
-            <% questions.each_with_index do |question, index| %>
-              <div class="form-group">
-                <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
+              <!-- Exibe as perguntas dentro de cada categoria -->
+              <% questions.each_with_index do |question, index| %>
+                <div class="form-group">
+                  <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
 
-                <!-- Usar `fields_for` com respostas associadas -->
-                <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
-                  <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
+                  <!-- Usar `fields_for` com respostas associadas -->
+                  <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+                    <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
 
-                  <!-- Respostas disponíveis -->
-                  <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
-                    <div class="form-check">
-                      <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
-                      <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                    </div>
+                    <!-- Condicional para verificar o tipo de resposta -->
+                    <% case question.response_type %>
+                    <% when 'radio' %>
+                      <!-- Exibe as opções como Radio Buttons -->
+                      <% question.options.each_with_index do |option, option_index| %>
+                        <div class="form-check">
+                          <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                          <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                        </div>
+                      <% end %>
+
+                    <% when 'dropdown' %>
+                      <!-- Exibe as opções como Dropdown (select) -->
+                      <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione..." %>
+
+<% when 'multiple' %>
+  <!-- Exibe as opções como Checkbox -->
+  <% question.options.each_with_index do |option, option_index| %>
+    <div class="form-check">
+      <%= answer_fields.check_box :response, { multiple: true, checked: (@survey.answers[index].response.include?(option)) }, option, nil %>
+      <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+    </div>
+  <% end %>
+
+                    <% else %>
+                      <p>Tipo de resposta desconhecido.</p>
+                    <% end %>
+
                   <% end %>
-                <% end %>
-              </div>
+                </div>
+              <% end %>
             <% end %>
-          <% end %>
+
 
           <div class="form-group mt-4">
             <button type="button" class="btn btn-secondary" onclick="prevTab()">Voltar</button>
