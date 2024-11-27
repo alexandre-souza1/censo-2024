@@ -16,6 +16,7 @@
               </div>
             </div>
           </div>
+        <div class="tab">
         <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
           <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
             <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2024</strong></h4>
@@ -36,29 +37,46 @@
           <%= form_with model: @survey, local: true do |form| %>
             <%= form.hidden_field :code %>
 
-            <!-- Loop sobre as perguntas, agrupadas por categoria -->
-            <% @grouped_questions.each do |category_number, questions| %>
-              <h3 class="category-title"><%= @category_names[category_number] %></h3>
+          <% @grouped_engagement_questions.each do |category_number, questions| %>
+            <!-- Exibe o nome da categoria visual com base no número da categoria -->
+            <h3 class="category-title">
+              <%= case category_number
+                  when 1 then "LIDERANÇAS"
+                  when 2 then "SEGURANÇA"
+                  when 3 then "SERVIÇOS GERAIS"
+                  when 4 then "RECONHECIMENTO"
+                  when 5 then "TREINAMENTO E DESENVOLVIMENTO"
+                  when 6 then "PLANEJAMENTO (FÉRIAS E JORNADA)"
+                  when 7 then "REMUNERAÇÃO E BENEFÍCIOS"
+                  when 8 then "PERTENCIMENTO"
+                  when 9 then "COMUNICAÇÃO"
+                  when 10 then "SEGURANÇA PSICOLÓGICA"
+                  else "CATEGORIA DESCONHECIDA"
+                  end
+              %>
+            </h3>
 
-              <% questions.each_with_index do |question, index| %>
-                <div class="form-group">
-                  <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
+            <!-- Exibe as perguntas dentro de cada categoria -->
+            <% questions.each_with_index do |question, index| %>
+              <div class="form-group">
+                <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
 
-                  <!-- Usar `fields_for` com respostas associadas -->
-                  <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
-                    <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
+                <!-- Usar `fields_for` com respostas associadas -->
+                <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+                  <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
 
-                    <!-- Respostas disponíveis -->
-                    <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
-                      <div class="form-check">
-                        <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
-                        <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                      </div>
-                    <% end %>
+                  <!-- Respostas disponíveis -->
+                  <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
+                    <div class="form-check">
+                      <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                      <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                    </div>
                   <% end %>
-                </div>
-              <% end %>
+                <% end %>
+              </div>
             <% end %>
+          <% end %>
+
 
             <!-- Botão para selecionar automaticamente todas as opções A -->
             <div class="form-group mt-4">
@@ -78,13 +96,75 @@
               <%= form.text_area :general_feedback, rows: 5, class: "form-control" %>
             </div>
 
-            <!-- Botão para enviar -->
             <div class="form-group mt-4">
-              <%= form.submit 'Enviar', class: 'btn btn-primary' %>
+              <button type="button" class="btn btn-primary" onclick="nextTab()">Próximo</button>
             </div>
-          <% end %>
 
         </div>
+      </div>
+      </div>
+      <div class="tab" style="display:none;">
+                <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
+          <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
+            <h4 class="margin-none text-center"><strong>CENSO 2024</strong></h4>
+            <br>
+          </div>
+          <div class="panel-body">
+          <br>
+          <div class="panel-heading" style="background: #efefef; border: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
+            <p>Nosso sonho é com um futuro com mais razões para brindar, logo temos o compromisso de contribuir para uma sociedade cada vez mais igualitária. Este censo nos ajudará a entender o panorama de nossos times em várias frentes: escolaridade, idade, gênero, sexualidade, raça, entre outras. A partir dos dados obtidos, formularemos juntos a melhor maneira de tornar nosso ambiente de trabalho cada vez mais diverso e inclusivo, onde toda nossa gente se sinta respeitada e capacitada para ser autêntica todos os dias. Reforçamos que a participação é extremamente importante e essa pesquisa é anônima.</p>
+            <br>
+          </div>
+
+          <% @grouped_censo_questions.each do |category_number, questions| %>
+            <!-- Exibe o nome da categoria visual com base no número da categoria -->
+            <h3 class="category-title">
+            <%= case category_number
+                when 1 then "DADOS INICIAIS"
+                when 2 then "ESCOLARIDADE"
+                when 3 then "ORIGEM"
+                when 4 then "MORADIA"
+                when 5 then "AUTENTICIDADE"
+                when 6 then "RENDA"
+                when 7 then "DIVERSIDADE E INCLUSÃO"
+                when 8 then "SAÚDE E SEGURANÇA OCUPACIONAL"
+                when 9 then "TRANSPORTE"
+                else "CATEGORIA DESCONHECIDA"
+                end
+            %>
+            </h3>
+
+            <!-- Exibe as perguntas dentro de cada categoria -->
+            <% questions.each_with_index do |question, index| %>
+              <div class="form-group">
+                <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
+
+                <!-- Usar `fields_for` com respostas associadas -->
+                <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+                  <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
+
+                  <!-- Respostas disponíveis -->
+                  <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
+                    <div class="form-check">
+                      <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                      <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <div class="form-group mt-4">
+            <button type="button" class="btn btn-secondary" onclick="prevTab()">Voltar</button>
+            <%= form.submit 'Enviar', class: 'btn btn-primary' %>
+          </div>
+
+
+        </div>
+      </div>
+
+            <% end %>
       </div>
     </div>
   </div>
@@ -101,4 +181,31 @@
       }
     });
   });
+
+    let currentTab = 0; // Começa na primeira aba
+  showTab(currentTab);
+
+  function showTab(n) {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => (tab.style.display = "none")); // Esconde todas as abas
+    tabs[n].style.display = "block"; // Mostra a aba atual
+  }
+
+  function nextTab() {
+    const tabs = document.querySelectorAll('.tab');
+    if (currentTab < tabs.length - 1) {
+      tabs[currentTab].style.display = "none";
+      currentTab++;
+      tabs[currentTab].style.display = "block";
+    }
+  }
+
+  function prevTab() {
+    const tabs = document.querySelectorAll('.tab');
+    if (currentTab > 0) {
+      tabs[currentTab].style.display = "none";
+      currentTab--;
+      tabs[currentTab].style.display = "block";
+    }
+  }
 </script>

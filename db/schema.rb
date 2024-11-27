@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_24_231858) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_27_000604) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_24_231858) do
 
   create_table "questions", force: :cascade do |t|
     t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "stage"
+    t.string "category"
+  end
+
+  create_table "second_stage_answers", force: :cascade do |t|
+    t.bigint "survey_id", null: false
+    t.bigint "second_stage_question_id", null: false
+    t.string "response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["second_stage_question_id"], name: "index_second_stage_answers_on_second_stage_question_id"
+    t.index ["survey_id"], name: "index_second_stage_answers_on_survey_id"
+  end
+
+  create_table "second_stage_questions", force: :cascade do |t|
+    t.string "text"
+    t.string "category"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -54,4 +73,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_24_231858) do
 
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "surveys"
+  add_foreign_key "second_stage_answers", "second_stage_questions"
+  add_foreign_key "second_stage_answers", "surveys"
 end

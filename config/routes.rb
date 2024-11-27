@@ -12,6 +12,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :questions, only: [] do
+    collection do
+      get :export_csv
+    end
+  end
+
   # Rota para health check
   get "up" => "rails/health#show", as: :rails_health_check
 

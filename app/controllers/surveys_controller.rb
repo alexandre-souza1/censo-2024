@@ -2,45 +2,39 @@ class SurveysController < ApplicationController
   def new
     @survey = Survey.new(code: params[:code]) # Inicializa a pesquisa com o código fornecido
     @questions = Question.all # Carrega todas as perguntas
+    @censo_questions = Question.where(category: 'Censo')
 
     # Cria as respostas relacionadas às perguntas
     @questions.each do |question|
       @survey.answers.build(question: question)
     end
 
-    @grouped_questions = @questions.group_by { |question| question.text.split(".").first.to_i }
+      # No controller, filtra as perguntas da categoria "Engagement"
+    @engagement_questions = @questions.select { |q| q.category == "Engagement" }
 
-    # Define os nomes das categorias
-    @category_names = {
-      1 => "LIDERANÇAS",
-      2 => "SEGURANÇA",
-      3 => "SERVIÇOS GERAIS",
-      4 => "RECONHECIMENTO",
-      5 => "TREINAMENTO E DESENVOLVIMENTO",
-      6 => "PLANEJAMENTO (FÉRIAS E JORNADA)",
-      7 => "REMUNERAÇÃO E BENEFÍCIOS",
-      8 => "PERTENCIMENTO",
-      9 => "COMUNICAÇÃO",
-      10 => "SEGURANÇA PSICOLÓGICA",
-    }
+    # Agora, agrupa as perguntas pelo primeiro número antes do ponto
+    @grouped_engagement_questions = @engagement_questions.group_by do |question|
+      question.text.split(".").first.to_i
+    end
+
+    # Ordena as categorias por número e as perguntas dentro de cada categoria por número
+    @grouped_censo_questions = @censo_questions.group_by do |question|
+      question.text.split(".").first.to_i  # Agrupando pelo número antes do ponto
+    end.sort.to_h
+
+    # Agora, dentro de cada categoria, ordena as perguntas de forma numérica com base no número completo (antes e depois do ponto)
+    @grouped_censo_questions.each do |category_number, questions|
+      @grouped_censo_questions[category_number] = questions.sort_by do |question|
+        question.text.split(".").map { |part| part.to_i }  # Divide em partes e converte cada parte para inteiro
+      end
+end
+
   end
 
 
   def create
     @survey = Survey.new(survey_params)
     @questions = Question.all
-    @category_names = {
-      1 => "LIDERANÇAS",
-      2 => "SEGURANÇA",
-      3 => "SERVIÇOS GERAIS",
-      4 => "RECONHECIMENTO",
-      5 => "TREINAMENTO E DESENVOLVIMENTO",
-      6 => "PLANEJAMENTO (FÉRIAS E JORNADA)",
-      7 => "REMUNERAÇÃO E BENEFÍCIOS",
-      8 => "PERTENCIMENTO",
-      9 => "COMUNICAÇÃO",
-      10 => "SEGURANÇA PSICOLÓGICA",
-    }
 
     if @survey.save
       redirect_to root_path, notice: "Pesquisa salva com sucesso!"
