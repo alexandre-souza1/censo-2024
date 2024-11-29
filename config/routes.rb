@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :surveys, only: [:new, :create, :show] do
     collection do
       get :export_csv
+      get :export_xlsx
     end
   end
 

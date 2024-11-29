@@ -1,3 +1,5 @@
+require 'axlsx'
+
 class SurveysController < ApplicationController
   def new
     # Inicializa a pesquisa com o código fornecido (se aplicável)
@@ -37,6 +39,36 @@ class SurveysController < ApplicationController
       render :new
     end
   end
+
+  def export_xlsx
+    require 'caxlsx' # Certifique-se de carregar a biblioteca
+
+    # Cria um novo arquivo Excel
+    p = Axlsx::Package.new
+    wb = p.workbook
+    sheet = wb.add_worksheet(name: "Pesquisas")
+
+    # Adiciona o cabeçalho da planilha
+    question_headers = Question.order(:id).pluck(:id, :text).map { |id, text| "Q#{id}: #{text}" }
+    headers = ["Código", "Score de Recomendação", "Feedback Geral", "Data de Criação"] + question_headers
+    sheet.add_row headers
+
+    # Adiciona os dados das pesquisas
+    Survey.all.each do |survey|
+      created_at_brasilia = survey.created_at.in_time_zone('America/Sao_Paulo').strftime('%Y-%m-%d %H:%M:%S')
+      survey_data = [survey.code, survey.recommendation_score, survey.general_feedback, created_at_brasilia]
+
+      # Respostas ordenadas por questão
+      answers_data = survey.answers.order(:question_id).map(&:response)
+
+      # Adiciona a linha com os dados
+      sheet.add_row survey_data + answers_data
+    end
+
+    # Envia o arquivo para download
+    send_data p.to_stream.read, filename: "surveys-#{Date.today}.xlsx", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
 
   def export_csv
     # Exporta os dados de pesquisas como CSV

@@ -32,6 +32,8 @@ gem "devise"
 
 gem 'ffi', '~> 1.16.0'
 
+gem 'caxlsx_rails'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 
