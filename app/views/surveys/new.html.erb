@@ -78,10 +78,13 @@
               <% end %>
 
 
-            <!-- Botão para selecionar automaticamente todas as opções A -->
-            <div class="form-group mt-4">
-              <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A' %>
-            </div>
+              <% if user_signed_in? %>
+                <!-- Botão para selecionar automaticamente todas as opções A -->
+                <div class="form-group mt-4">
+                  <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A' %>
+                </div>
+              <% end %>
+
 
             <!-- Pergunta com Escala de 0 a 10 -->
             <h3 class="category-title">11 - NPS</h3>
@@ -158,14 +161,14 @@
                       <!-- Exibe as opções como Dropdown (select) -->
                       <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione..." %>
 
-<% when 'multiple' %>
-  <!-- Exibe as opções como Checkbox -->
-  <% question.options.each_with_index do |option, option_index| %>
-    <div class="form-check">
-      <%= answer_fields.check_box :response, { multiple: true, checked: (@survey.answers[index].response.include?(option)) }, option, nil %>
-      <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-    </div>
-  <% end %>
+                      <% when 'multiple' %>
+                        <!-- Exibe as opções como Checkbox -->
+                        <% question.options.each_with_index do |option, option_index| %>
+                          <div class="form-check">
+                            <%= answer_fields.check_box :response, { multiple: true, checked: (@survey.answers[index].response.include?(option)) }, option, nil %>
+                            <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                          </div>
+                        <% end %>
 
                     <% else %>
                       <p>Tipo de resposta desconhecido.</p>

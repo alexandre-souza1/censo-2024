@@ -19,15 +19,23 @@ class Survey < ApplicationRecord
   end
 
   def self.to_csv
-    attributes = ["code", "recommendation_score", "general_feedback"]
+    attributes = ["code", "recommendation_score", "general_feedback", "created_at"]
 
     CSV.generate(headers: true, encoding: 'UTF-8') do |csv|
       # Adicionando as perguntas com a codificação correta
       csv << attributes + Question.pluck(:id, :text).map { |id, text| "Q#{id}: #{text.force_encoding('UTF-8')}" }
 
       all.each do |survey|
-        survey_data = attributes.map { |attr| survey.send(attr) }
-        answers_data = survey.answers.order(:question_id).map(&:response)
+        # Converte 'created_at' para o horário de Brasília (GMT-3) e formata a data
+        created_at_brasilia = survey.created_at.in_time_zone('Brasilia').strftime('%Y-%m-%d %H:%M:%S')
+
+        # Prepara os dados da pesquisa, incluindo o created_at convertido
+        survey_data = attributes.map { |attr| attr == 'created_at' ? created_at_brasilia : survey.send(attr) }
+
+        # Prepara as respostas das perguntas
+        answers_data = survey.answers.order(:question_id).map { |answer| answer.response.force_encoding('UTF-8') }
+
+        # Adiciona a linha no CSV
         csv << survey_data + answers_data
       end
     end

@@ -30,7 +30,7 @@ class SurveysController < ApplicationController
         format_multiple_responses(@survey.answers)
 
     if @survey.save
-      redirect_to root_path, notice: "Pesquisa salva com sucesso!"
+      redirect_to survey_path(@survey), notice: "Pesquisa salva com sucesso!"
     else
       logger.debug(@survey.errors.full_messages)
       flash.now[:alert] = "Erro ao salvar a pesquisa. Verifique os campos."
@@ -42,6 +42,11 @@ class SurveysController < ApplicationController
     # Exporta os dados de pesquisas como CSV
     send_data Survey.to_csv, filename: "surveys-#{Date.today}.csv", type: 'text/csv; charset=utf-8'
   end
+
+  def show
+    @survey = Survey.find(params[:id])
+  end
+
 
   private
 

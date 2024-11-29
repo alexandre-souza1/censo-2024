@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # Rotas do formulário
-  resources :surveys, only: [:new, :create]
-
-  resources :surveys do
+  resources :surveys, only: [:new, :create, :show] do
     collection do
       get :export_csv
     end
