@@ -1,7 +1,7 @@
 <div class="bg-sessions">
   <div class="container py-5">
     <div class="row">
-      <div class="col-12">
+      <div data-controller="meu-script" data-meu-script-current-tab-value="0" class="col-12">
         <!-- Container principal -->
                   <!-- Cabeçalho da pesquisa -->
           <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
@@ -16,7 +16,7 @@
               </div>
             </div>
           </div>
-        <div class="tab">
+        <div class="tab" data-meu-script-target="tab">
         <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
           <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
             <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2024</strong></h4>
@@ -81,7 +81,7 @@
               <% if user_signed_in? %>
                 <!-- Botão para selecionar automaticamente todas as opções A -->
                 <div class="form-group mt-4">
-                  <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A' %>
+                  <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A', data: { action: 'meu-script#selectAllA' } %>
                 </div>
               <% end %>
 
@@ -100,13 +100,13 @@
             </div>
 
             <div class="form-group mt-4">
-              <button type="button" class="btn btn-primary" onclick="nextTab()">Próximo</button>
+              <button type="button" class="btn btn-primary" data-action="meu-script#nextTab">Próximo</button>
             </div>
 
         </div>
       </div>
       </div>
-      <div class="tab" style="display:none;">
+      <div class="tab" data-meu-script-target="tab" style="display: none;">
                 <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
           <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
             <h4 class="margin-none text-center"><strong>CENSO 2024</strong></h4>
@@ -181,7 +181,7 @@
 
 
           <div class="form-group mt-4">
-            <button type="button" class="btn btn-secondary" onclick="prevTab()">Voltar</button>
+            <button type="button" class="btn btn-secondary" data-action="meu-script#prevTab">Voltar</button>
             <%= form.submit 'Enviar', class: 'btn btn-primary' %>
           </div>
 
@@ -195,42 +195,3 @@
   </div>
 </div>
 </div>
-
-<script>
-  // JavaScript para selecionar todas as opções 'A' de todas as perguntas
-  document.getElementById('select_all_A').addEventListener('click', function() {
-    // Seleciona todos os botões de rádio com id começando com "response_" e marca a opção 'A' (primeira opção)
-    document.querySelectorAll('input[id^="response_"]').forEach(function(radioButton) {
-      if (radioButton.id.endsWith('_0')) { // '0' representa a opção 'A'
-        radioButton.checked = true;
-      }
-    });
-  });
-
-    let currentTab = 0; // Começa na primeira aba
-  showTab(currentTab);
-
-  function showTab(n) {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => (tab.style.display = "none")); // Esconde todas as abas
-    tabs[n].style.display = "block"; // Mostra a aba atual
-  }
-
-  function nextTab() {
-    const tabs = document.querySelectorAll('.tab');
-    if (currentTab < tabs.length - 1) {
-      tabs[currentTab].style.display = "none";
-      currentTab++;
-      tabs[currentTab].style.display = "block";
-    }
-  }
-
-  function prevTab() {
-    const tabs = document.querySelectorAll('.tab');
-    if (currentTab > 0) {
-      tabs[currentTab].style.display = "none";
-      currentTab--;
-      tabs[currentTab].style.display = "block";
-    }
-  }
-</script>
