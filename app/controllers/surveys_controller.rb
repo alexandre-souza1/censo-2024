@@ -49,30 +49,33 @@ class SurveysController < ApplicationController
     wb = p.workbook
     sheet = wb.add_worksheet(name: "Pesquisas")
 
-    # Adiciona o cabeçalho da planilha
+    # Cabeçalhos: Código, Data, e todas as perguntas
     question_headers = Question.order(:id).pluck(:id, :text).map { |id, text| "Q#{id}: #{text}" }
-    headers = ["Código", "Score de Recomendação", "Feedback Geral", "Data de Criação"] + question_headers
+    headers = ["Código", "Data de Criação"] + question_headers
     sheet.add_row headers
 
-    # Adiciona os dados das pesquisas
+    # Dados das pesquisas
     Survey.all.each do |survey|
       created_at_brasilia = survey.created_at.in_time_zone('America/Sao_Paulo').strftime('%Y-%m-%d %H:%M:%S')
-      survey_data = [survey.code, survey.recommendation_score, survey.general_feedback, created_at_brasilia]
+      survey_data = [survey.code, created_at_brasilia]
 
-      # Respostas ordenadas por questão
-      answers_data = survey.answers.order(:question_id).map(&:response)
+      # Respostas ordenadas por question_id
+      answers_data = survey.answers.order(:question_id).map do |answer|
+        resposta = answer.response.to_s
 
-      # Adiciona a linha com os dados
+        if resposta.start_with?('["') && resposta.end_with?('"]')
+          # Remove colchetes e aspas e separa itens com vírgula
+          resposta[2..-3].split('", "').join(', ')
+        else
+          resposta
+        end
+      end
+
       sheet.add_row survey_data + answers_data
     end
 
-    # Envia o arquivo para download
+    # Exporta o arquivo
     send_data p.to_stream.read, filename: "surveys-#{Date.today}.xlsx", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  end
-
-  def export_csv
-    # Exporta os dados de pesquisas como CSV
-    send_data Survey.to_csv, filename: "surveys-#{Date.today}.csv", type: 'text/csv; charset=utf-8'
   end
 
   def destroy_all
