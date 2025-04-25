@@ -13,6 +13,9 @@ Rails.application.routes.draw do
     end
   end
 
+    # Rota de validação separada
+  post 'validate_survey_code', to: 'surveys#validate_code', as: 'validate_survey_code'
+
   resources :questions do
     collection do
       get :export_csv

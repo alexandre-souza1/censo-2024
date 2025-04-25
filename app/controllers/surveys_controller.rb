@@ -5,6 +5,16 @@ class SurveysController < ApplicationController
     @surveys = Survey.all
   end
 
+def validate_code
+  code = params[:code].to_s.upcase
+  if Codigo.exists?(code: code)
+    redirect_to new_survey_path(code: code)
+  else
+    flash[:error] = "Código inválido! Por favor, insira um código válido."
+    redirect_to root_path # Ou para onde seu formulário de código está
+  end
+end
+
   def new
     @survey = Survey.new(code: params[:code])
 

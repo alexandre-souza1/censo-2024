@@ -5,6 +5,7 @@
       <tr>
         <th>ID</th>
         <th>Código da Pesquisa</th>
+        <th>Nome</th>
         <th>Data de Criação</th>
         <th>Respostas</th>
         <th>Ações</th>
@@ -15,6 +16,7 @@
         <tr>
           <td><%= survey.id %></td>
           <td><%= survey.code %></td>
+          <td><%= nome_por_codigo(survey.code) %></td>
           <td><%= survey.created_at.strftime('%d/%m/%Y') %></td>
           <td>
             <%= survey.answers.present? ? "#{survey.answers.count} resposta(s)" : "Nenhuma resposta" %>
