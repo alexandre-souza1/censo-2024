@@ -1,6 +1,10 @@
 require 'axlsx'
 
 class SurveysController < ApplicationController
+  def index
+    @surveys = Survey.all
+  end
+
   def new
     @survey = Survey.new(code: params[:code])
 
@@ -30,7 +34,7 @@ class SurveysController < ApplicationController
     end
 
     if @survey.save
-      redirect_to survey_path(@survey), notice: "Pesquisa salva com sucesso!"
+      redirect_to finish_path, notice: "Pesquisa salva com sucesso!"
     else
       flash.now[:alert] = "Erro ao salvar a pesquisa. Verifique os campos."
       render :new
@@ -66,10 +70,24 @@ class SurveysController < ApplicationController
     send_data p.to_stream.read, filename: "surveys-#{Date.today}.xlsx", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
-
   def export_csv
     # Exporta os dados de pesquisas como CSV
     send_data Survey.to_csv, filename: "surveys-#{Date.today}.csv", type: 'text/csv; charset=utf-8'
+  end
+
+  def destroy_all
+    if request.delete?
+      Survey.destroy_all
+      redirect_to surveys_path, notice: "Todas as pesquisas foram deletadas com sucesso!"
+    else
+      redirect_to surveys_path, alert: "Ação não permitida."
+    end
+  end
+
+  def destroy
+    @survey = Survey.find(params[:id])
+    @survey.destroy
+    redirect_to surveys_path, notice: "Pesquisa deletada com sucesso!"
   end
 
   def show

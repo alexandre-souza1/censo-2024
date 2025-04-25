@@ -2,10 +2,12 @@ Rails.application.routes.draw do
   devise_for :users
   # Página inicial definida como "pages#home" (pode ser alterada para "home#index" se necessário)
   root to: "pages#home"
+  get '/pages/finish', to: 'pages#finish', as: 'finish'
 
   # Rotas do formulário
-  resources :surveys, only: [:new, :create, :show] do
+  resources :surveys, only: [:new, :create, :show, :index, :destroy] do
     collection do
+      delete :destroy_all
       get :export_csv
       get :export_xlsx
     end
