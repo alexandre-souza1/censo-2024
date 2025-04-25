@@ -21,25 +21,24 @@ export default class extends Controller {
   }
 
   showTab(n) {
-    // Esconde todas as abas
-    this.tabTargets.forEach(tab => (tab.style.display = "none"))
-    // Mostra a aba atual
-    this.tabTargets[n].style.display = "block"
+    this.tabTargets.forEach((tab, index) => {
+      tab.classList.toggle("hidden", index !== n)
+    })
   }
 
   nextTab() {
     if (this.currentTab < this.tabTargets.length - 1) {
-      this.tabTargets[this.currentTab].style.display = "none"
+      this.tabTargets[this.currentTab].classList.add("hidden")
       this.currentTab++
-      this.tabTargets[this.currentTab].style.display = "block"
+      this.tabTargets[this.currentTab].classList.remove("hidden")
     }
   }
 
   prevTab() {
     if (this.currentTab > 0) {
-      this.tabTargets[this.currentTab].style.display = "none"
+      this.tabTargets[this.currentTab].classList.add("hidden")
       this.currentTab--
-      this.tabTargets[this.currentTab].style.display = "block"
+      this.tabTargets[this.currentTab].classList.remove("hidden")
     }
   }
 }

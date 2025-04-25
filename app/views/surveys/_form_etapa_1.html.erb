@@ -4,7 +4,7 @@
   </h3>
 
   <% questions.each_with_index do |question, index| %>
-    <div class="form-group">
+    <div class="form-group pb-3">
       <%= form.label "response_#{index + 1}", content_tag(:strong, "#{question.category_id}.#{question.stage} - #{question.text}") %>
 
       <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
@@ -20,7 +20,7 @@
             <% end %>
 
           <% when 'dropdown' %>
-            <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione..." %>
+            <%= answer_fields.select :response, options_for_select(question.options), { prompt: "Selecione..." }, class: "form-select w-100 mt-2" %>
 
           <% when 'textbox' %>
               <div class="form-group">

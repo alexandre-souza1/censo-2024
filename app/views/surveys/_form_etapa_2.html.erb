@@ -4,7 +4,7 @@
   </h3>
 
   <% questions.each_with_index do |question, index| %>
-    <div class="form-group">
+    <div class="form-group pb-3">
       <% mapped_category_id = question.category_id.to_i - 11 %>
       <%= form.label "response_#{index + 1}", content_tag(:strong, "#{mapped_category_id}.#{question.stage} - #{question.text}") %>
 
@@ -21,7 +21,7 @@
             <% end %>
 
           <% when 'dropdown' %>
-            <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione...", rows: 4, style: "resize: none;" %>
+            <%= answer_fields.select :response, options_for_select(question.options), { prompt: "Selecione..." }, class: "form-select w-100 mt-2" %>
 
           <% when 'checkbox' %>
             <% question.options.each_with_index do |option, option_index| %>

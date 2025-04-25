@@ -6,7 +6,7 @@
         <!-- Cabeçalho da pesquisa -->
         <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
           <div class="col-10">
-            <h4 class="margin-none"><strong>Pesquisa Clima Organizacional 2025</strong></h4>
+            <h4 class="margin-none"><strong>Pesquisa Engagement H1 & Serviços Gerais 2025</strong></h4>
             <p><strong>Aplicação:</strong> anualmente para colaboradores administrativos, operacionais e lideranças ativos há mais de 01 (um) mês.</p>
           </div>
           <div class="col-lg-2 padding-none" style="border: 2px solid #1a1a1a;">
@@ -17,38 +17,37 @@
           </div>
         </div>
 
-        <!-- Aba de Engajamento -->
-        <div class="tab" data-meu-script-target="tab">
-          <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
-            <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
-              <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2025</strong></h4>
-            </div>
-            <div class="panel-body">
-              <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 2; font-size:12px; border-top: 2px solid #1a1a1a">
-                <h6 class="text-body-2">Considere a seguinte escala de respostas para todas afirmativas abaixo:</h6>
-                <div class="margin-none text-left"><strong>A) Concordo totalmente</strong> - se você concorda em 100% da afirmativa</div>
-                <div class="margin-none text-left"><strong>B) Concordo</strong> - se você concorda com a afirmativa, mas não em 100%</div>
-                <div class="margin-none text-left"><strong>C) Discordo</strong> - se você discorda da afirmativa, mas não em 100%</div>
-                <div class="margin-none text-left"><strong>D) Discordo totalmente</strong> - se você discorda em 100% da afirmativa</div>
-                <div class="margin-none text-left"><strong>E) Não aplicável</strong> - se você não tem conhecimento acerca da afirmativa</div>
+        <%= form_with model: @survey, local: true do |form| %>
+          <%= form.hidden_field :code %>
+          <!-- Aba de Engajamento -->
+          <div class="tab" data-meu-script-target="tab">
+            <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
+              <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 15px; padding-top: 15px;">
+                <h5 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2025</strong></h5>
               </div>
-              <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
-                  <div class="d-flex justify-content-center align-items-center">
-                    <p class="text-center">Participe da Pesquisa Engagment H1!<br>
-                      Olá, pessoal!<br>
-                      Estamos aplicando nossa Pesquisa Engagment H1 2025 e nesse ano a pesquisa vem com 10 blocos e 32 perguntas, e a sua participação é super importante pra nós!
-                      Este ano, temos uma novidade: um bloco especial sobre saúde mental.<br>
-                      Queremos entender como vocês estão se sentindo e como podemos apoiar ainda mais o bem-estar de todos. Este bloco foi pensado para que possamos construir um ambiente de trabalho cada vez mais saudável e equilibrado.<br>
-                      A pesquisa é anônima e é muito importante que todos respondam com sinceridade.<br>
-                      Sua opinião faz toda a diferença para melhorarmos juntos!<br>
-                      Contamos com você!<br>
-                      #JuntosPorUmaOperaçãoMelhor
-                    </p>
-                 </div>
-              </div>
-
-              <%= form_with model: @survey, local: true do |form| %>
-                <%= form.hidden_field :code %>
+              <div class="panel-body">
+                <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 2; font-size:12px; border-top: 2px solid #1a1a1a">
+                  <h6 class="text-body-2">Considere a seguinte escala de respostas para todas afirmativas abaixo:</h6>
+                  <div class="margin-none text-left"><strong>A) Concordo totalmente</strong> - se você concorda em 100% da afirmativa</div>
+                  <div class="margin-none text-left"><strong>B) Concordo</strong> - se você concorda com a afirmativa, mas não em 100%</div>
+                  <div class="margin-none text-left"><strong>C) Discordo</strong> - se você discorda da afirmativa, mas não em 100%</div>
+                  <div class="margin-none text-left"><strong>D) Discordo totalmente</strong> - se você discorda em 100% da afirmativa</div>
+                  <div class="margin-none text-left"><strong>E) Não aplicável</strong> - se você não tem conhecimento acerca da afirmativa</div>
+                </div>
+                <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
+                    <div class="d-flex justify-content-center align-items-center">
+                      <p class="text-center">Participe da Pesquisa Engagment H1!<br>
+                        Olá, pessoal!<br>
+                        Estamos aplicando nossa Pesquisa Engagment H1 2025 e nesse ano a pesquisa vem com 10 blocos e 32 perguntas, e a sua participação é super importante pra nós!
+                        Este ano, temos uma novidade: um bloco especial sobre saúde mental.<br>
+                        Queremos entender como vocês estão se sentindo e como podemos apoiar ainda mais o bem-estar de todos. Este bloco foi pensado para que possamos construir um ambiente de trabalho cada vez mais saudável e equilibrado.<br>
+                        A pesquisa é anônima e é muito importante que todos respondam com sinceridade.<br>
+                        Sua opinião faz toda a diferença para melhorarmos juntos!<br>
+                        Contamos com você!<br>
+                        #JuntosPorUmaOperaçãoMelhor
+                      </p>
+                  </div>
+                </div>
 
                 <%= render partial: 'form_etapa_1', locals: { form: form, questions: @etapa_1_questions } %>
 
@@ -66,7 +65,7 @@
         </div>
 
         <!-- Aba de Censo -->
-        <div class="tab" data-meu-script-target="tab" style="display: none;">
+        <div class="tab hidden" data-meu-script-target="tab">
           <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
             <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
               <h4 class="margin-none text-center"><strong>CENSO 2025</strong></h4>
