@@ -1,0 +1,38 @@
+<div class="container">
+<h1>Editar Pergunta</h1>
+
+<%= form_with model: @question, local: true do |form| %>
+  <div>
+    <%= form.label :text, "Texto da Pergunta" %><br>
+    <%= form.text_field :text %>
+  </div>
+
+  <div>
+    <%= form.label :question_type, "Tipo" %><br>
+    <%= form.text_field :question_type %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :category_id, "Categoria", class: "form-label" %>
+    <p class="form-control-plaintext">
+      <%= category_name_for(form.object) %>
+    </p>
+  </div>
+
+  <div>
+    <%= form.label :response_type, "Tipo de Resposta" %><br>
+    <%= form.text_field :response_type %>
+  </div>
+
+  <div>
+    <%= form.label :options, "Opções (separadas por vírgula)" %><br>
+    <%= form.text_field :options, value: @question.options.join(", ") %>
+  </div>
+
+  <div>
+    <%= form.submit "Salvar", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "Voltar", questions_path, class: "btn btn-secondary" %>
+</div>

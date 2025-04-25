@@ -10,18 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_27_112619) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_24_204003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answers", force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.bigint "question_id", null: false
-    t.string "response"
+    t.text "response", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["question_id"], name: "index_answers_on_question_id"
     t.index ["survey_id"], name: "index_answers_on_survey_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "questions", force: :cascade do |t|
@@ -29,17 +35,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_27_112619) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "stage"
-    t.string "category"
+    t.string "question_type"
     t.string "response_type"
-    t.text "options", default: [], array: true
+    t.string "options", default: [], array: true
+    t.integer "category_id"
   end
 
   create_table "surveys", force: :cascade do |t|
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "recommendation_score"
-    t.text "general_feedback"
   end
 
   create_table "users", force: :cascade do |t|

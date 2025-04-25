@@ -2,195 +2,89 @@
   <div class="container py-5">
     <div class="row">
       <div data-controller="meu-script" data-meu-script-current-tab-value="0" class="col-12">
-        <!-- Container principal -->
-                  <!-- Cabeçalho da pesquisa -->
-          <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
-            <div class="col-10">
-              <h4 class="margin-none"><strong>Pesquisa Clima Organizacional 2024</strong></h4>
-              <p><strong>Aplicação:</strong> anualmente para colaboradores administrativos, operacionais e lideranças ativos há mais de 01 (um) mês.</p>
+
+        <!-- Cabeçalho da pesquisa -->
+        <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
+          <div class="col-10">
+            <h4 class="margin-none"><strong>Pesquisa Clima Organizacional 2025</strong></h4>
+            <p><strong>Aplicação:</strong> anualmente para colaboradores administrativos, operacionais e lideranças ativos há mais de 01 (um) mês.</p>
+          </div>
+          <div class="col-lg-2 padding-none" style="border: 2px solid #1a1a1a;">
+            <div class="padding-none">
+              <p class="text-center bgGreenTea" style="border-bottom: 2px solid #1a1a1a;"><strong>Vigência</strong></p>
+              <p class="text-center">01/04/2025</p>
             </div>
-            <div class="col-lg-2 padding-none" style="border: 2px solid #1a1a1a;">
-              <div class="padding-none">
-                <p class="text-center bgGreenTea" style="border-bottom: 2px solid #1a1a1a;"><strong>Vigência</strong></p>
-                <p class="text-center">01/11/2024</p>
+          </div>
+        </div>
+
+        <!-- Aba de Engajamento -->
+        <div class="tab" data-meu-script-target="tab">
+          <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
+            <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
+              <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2025</strong></h4>
+            </div>
+            <div class="panel-body">
+              <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 2; font-size:12px; border-top: 2px solid #1a1a1a">
+                <h6 class="text-body-2">Considere a seguinte escala de respostas para todas afirmativas abaixo:</h6>
+                <div class="margin-none text-left"><strong>A) Concordo totalmente</strong> - se você concorda em 100% da afirmativa</div>
+                <div class="margin-none text-left"><strong>B) Concordo</strong> - se você concorda com a afirmativa, mas não em 100%</div>
+                <div class="margin-none text-left"><strong>C) Discordo</strong> - se você discorda da afirmativa, mas não em 100%</div>
+                <div class="margin-none text-left"><strong>D) Discordo totalmente</strong> - se você discorda em 100% da afirmativa</div>
+                <div class="margin-none text-left"><strong>E) Não aplicável</strong> - se você não tem conhecimento acerca da afirmativa</div>
+              </div>
+              <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <p class="text-center">Participe da Pesquisa Engagment H1!<br>
+                      Olá, pessoal!<br>
+                      Estamos aplicando nossa Pesquisa Engagment H1 2025 e nesse ano a pesquisa vem com 10 blocos e 32 perguntas, e a sua participação é super importante pra nós!
+                      Este ano, temos uma novidade: um bloco especial sobre saúde mental.<br>
+                      Queremos entender como vocês estão se sentindo e como podemos apoiar ainda mais o bem-estar de todos. Este bloco foi pensado para que possamos construir um ambiente de trabalho cada vez mais saudável e equilibrado.<br>
+                      A pesquisa é anônima e é muito importante que todos respondam com sinceridade.<br>
+                      Sua opinião faz toda a diferença para melhorarmos juntos!<br>
+                      Contamos com você!<br>
+                      #JuntosPorUmaOperaçãoMelhor
+                    </p>
+                 </div>
+              </div>
+
+              <%= form_with model: @survey, local: true do |form| %>
+                <%= form.hidden_field :code %>
+
+                <%= render partial: 'form_etapa_1', locals: { form: form, questions: @etapa_1_questions } %>
+
+                <% if user_signed_in? %>
+                  <div class="form-group mt-4">
+                    <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A', data: { action: 'meu-script#selectAllA' } %>
+                  </div>
+                <% end %>
+
+              <div class="form-group mt-4">
+                <button type="button" class="btn btn-primary" data-action="meu-script#nextTab">Próximo</button>
               </div>
             </div>
           </div>
-        <div class="tab" data-meu-script-target="tab">
-        <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
-          <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
-            <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2024</strong></h4>
-            <br>
-          </div>
-          <div class="panel-body">
-          <br>
-          <div class="panel-heading" style="background: #efefef; border: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
-            <h4 class="text-body-2">Escala</h4>
-            <div class=" margin-none text-left"><strong>A)	Concordo totalmente</strong> - se você concorda em 100% da afirmativa</div>
-            <div class=" margin-none text-left"><strong>B)	Concordo</strong> - se você concorda com a afirmativa, mas não em 100%</div>
-            <div class=" margin-none text-left"><strong>C)	Discordo</strong> - se você discorda da afirmativa, mas não em 100%</div>
-            <div class=" margin-none text-left"><strong>D)	Discordo totalmente</strong> - se você discorda em 100% da afirmativa</div>
-            <div class=" margin-none text-left"><strong>E)	Não aplicável</strong> - se você não tem conhecimento acerca da afirmativa, uma vez que não se aplica ao seu contexto de trabalho.</div>
-            <br>
         </div>
 
-          <%= form_with model: @survey, local: true do |form| %>
-              <%= form.hidden_field :code %>
-
-              <% @grouped_engagement_questions.each do |category_number, questions| %>
-                <!-- Exibe o nome da categoria visual com base no número da categoria -->
-                <h3 class="category-title">
-                  <%= case category_number
-                      when 1 then "LIDERANÇAS"
-                      when 2 then "SEGURANÇA"
-                      when 3 then "SERVIÇOS GERAIS"
-                      when 4 then "RECONHECIMENTO"
-                      when 5 then "TREINAMENTO E DESENVOLVIMENTO"
-                      when 6 then "PLANEJAMENTO (FÉRIAS E JORNADA)"
-                      when 7 then "REMUNERAÇÃO E BENEFÍCIOS"
-                      when 8 then "PERTENCIMENTO"
-                      when 9 then "COMUNICAÇÃO"
-                      when 10 then "SEGURANÇA PSICOLÓGICA"
-                      else "CATEGORIA DESCONHECIDA"
-                      end
-                  %>
-                </h3>
-
-                <!-- Exibe as perguntas dentro de cada categoria -->
-                <% questions.each_with_index do |question, index| %>
-                  <div class="form-group">
-                    <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
-
-                    <!-- Usar `fields_for` com respostas associadas -->
-                    <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
-                      <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
-
-                      <!-- Respostas disponíveis -->
-                      <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente", "Não Aplicável"].each_with_index do |option, option_index| %>
-                        <div class="form-check">
-                          <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
-                          <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                        </div>
-                      <% end %>
-                    <% end %>
-                  </div>
-                <% end %>
-              <% end %>
-
-
-              <% if user_signed_in? %>
-                <!-- Botão para selecionar automaticamente todas as opções A -->
-                <div class="form-group mt-4">
-                  <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A', data: { action: 'meu-script#selectAllA' } %>
-                </div>
-              <% end %>
-
-
-            <!-- Pergunta com Escala de 0 a 10 -->
-            <h3 class="category-title">11 - NPS</h3>
-            <div class="form-group mt-4">
-              <%= form.label :recommendation_score, "11.1 - Em uma escala de 0 a 10, qual a probabilidade de você recomendar a empresa como um bom lugar para trabalhar?" %>
-              <%= form.select :recommendation_score, (0..10).to_a, {}, class: "form-select" %>
+        <!-- Aba de Censo -->
+        <div class="tab" data-meu-script-target="tab" style="display: none;">
+          <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
+            <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
+              <h4 class="margin-none text-center"><strong>CENSO 2025</strong></h4>
             </div>
+            <div class="panel-body">
 
-            <!-- Pergunta com Campo de Texto -->
-            <div class="form-group mt-4">
-              <%= form.label :general_feedback, "11.2 - Descreva aqui quais as suas percepções gerais sobre a empresa e ações que precisam ser tomadas para que este seja um bom lugar para se trabalhar." %>
-              <%= form.text_area :general_feedback, rows: 5, class: "form-control" %>
-            </div>
+            <%= render partial: 'form_etapa_2', locals: { form: form, questions: @etapa_2_questions } %>
 
             <div class="form-group mt-4">
-              <button type="button" class="btn btn-primary" data-action="meu-script#nextTab">Próximo</button>
+              <button type="button" class="btn btn-secondary" data-action="meu-script#prevTab">Voltar</button>
+              <%= form.submit 'Enviar', class: 'btn btn-primary' %>
             </div>
-        </div>
-      </div>
-      </div>
-      <div class="tab" data-meu-script-target="tab" style="display: none;">
-                <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
-          <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
-            <h4 class="margin-none text-center"><strong>CENSO 2024</strong></h4>
-            <br>
-          </div>
-          <div class="panel-body">
-          <br>
-          <div class="panel-heading" style="background: #efefef; border: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px">
-            <p>Nosso sonho é com um futuro com mais razões para brindar, logo temos o compromisso de contribuir para uma sociedade cada vez mais igualitária. Este censo nos ajudará a entender o panorama de nossos times em várias frentes: escolaridade, idade, gênero, sexualidade, raça, entre outras. A partir dos dados obtidos, formularemos juntos a melhor maneira de tornar nosso ambiente de trabalho cada vez mais diverso e inclusivo, onde toda nossa gente se sinta respeitada e capacitada para ser autêntica todos os dias. Reforçamos que a participação é extremamente importante e essa pesquisa é anônima.</p>
-            <br>
-          </div>
-
-            <% @grouped_censo_questions.each do |category_number, questions| %>
-              <!-- Exibe o nome da categoria visual com base no número da categoria -->
-              <h3 class="category-title">
-                <%= case category_number
-                    when 1 then "DADOS INICIAIS"
-                    when 2 then "ESCOLARIDADE"
-                    when 3 then "ORIGEM"
-                    when 4 then "MORADIA"
-                    when 5 then "AUTENTICIDADE"
-                    when 6 then "RENDA"
-                    when 7 then "DIVERSIDADE E INCLUSÃO"
-                    when 8 then "SAÚDE E SEGURANÇA OCUPACIONAL"
-                    when 9 then "TRANSPORTE"
-                    else "CATEGORIA DESCONHECIDA"
-                    end
-                %>
-              </h3>
-
-              <!-- Exibe as perguntas dentro de cada categoria -->
-              <% questions.each_with_index do |question, index| %>
-                <div class="form-group">
-                  <%= form.label "response_#{index + 1}", content_tag(:strong, question.text) %>
-
-                  <!-- Usar `fields_for` com respostas associadas -->
-                  <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
-                    <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
-
-                    <!-- Condicional para verificar o tipo de resposta -->
-                    <% case question.response_type %>
-                    <% when 'radio' %>
-                      <!-- Exibe as opções como Radio Buttons -->
-                      <% question.options.each_with_index do |option, option_index| %>
-                        <div class="form-check">
-                          <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
-                          <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                        </div>
-                      <% end %>
-
-                    <% when 'dropdown' %>
-                      <!-- Exibe as opções como Dropdown (select) -->
-                      <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione..." %>
-
-                      <% when 'multiple' %>
-                        <!-- Exibe as opções como Checkbox -->
-                        <% question.options.each_with_index do |option, option_index| %>
-                          <div class="form-check">
-                            <%= answer_fields.check_box :response, { multiple: true, checked: (@survey.answers[index].response.include?(option)) }, option, nil %>
-                            <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                          </div>
-                        <% end %>
-
-                    <% else %>
-                      <p>Tipo de resposta desconhecido.</p>
-                    <% end %>
-
-                  <% end %>
-                </div>
-              <% end %>
-            <% end %>
-
-
-          <div class="form-group mt-4">
-            <button type="button" class="btn btn-secondary" data-action="meu-script#prevTab">Voltar</button>
-            <%= form.submit 'Enviar', class: 'btn btn-primary' %>
-          </div>
-
-
-        </div>
-      </div>
 
             <% end %>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>

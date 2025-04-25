@@ -1,0 +1,16 @@
+<div class="container">
+  <h1>Importar Perguntas via CSV</h1>
+
+  <%= form_with url: import_questions_path, multipart: true, local: true do |form| %>
+    <div>
+      <%= form.label :file, "Escolha o arquivo CSV" %><br>
+      <%= form.file_field :file %>
+    </div>
+
+    <div style="margin-top: 10px;">
+      <%= form.submit "Importar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <%= link_to 'Voltar', root_path, style: "display: inline-block; margin-top: 10px;" %>
+</div>

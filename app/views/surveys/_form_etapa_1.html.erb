@@ -1,0 +1,33 @@
+<% @grouped_engagement_questions.each do |category_id, questions| %>
+  <h3 class="category-title">
+    <%= "#{category_id} - #{category_name_by_id(category_id)}" %>
+  </h3>
+
+  <% questions.each_with_index do |question, index| %>
+    <div class="form-group">
+      <%= form.label "response_#{index + 1}", content_tag(:strong, "#{question.category_id}.#{question.stage} - #{question.text}") %>
+
+      <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+        <%= answer_fields.hidden_field :question_id, value: question.id %>
+
+        <% case question.response_type %>
+          <% when 'radio' %>
+            <% question.options.each_with_index do |option, option_index| %>
+              <div class="form-check">
+                <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+              </div>
+            <% end %>
+
+          <% when 'dropdown' %>
+            <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione..." %>
+
+          <% when 'textbox' %>
+              <div class="form-group">
+                <%= answer_fields.text_area :response, placeholder: "Digite sua resposta", class: "form-control", rows: 4, style: "resize: none;" %>
+              </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

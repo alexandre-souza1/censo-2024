@@ -49,3 +49,26 @@
     }
   }
 </script>
+
+
+
+
+<h1>Respostas da Pesquisa</h1>
+
+<p><strong>Código da Pesquisa:</strong> <%= @survey.code %></p>
+
+<% @grouped_answers.sort_by { |category_id, _| category_id }.each do |category_id, answers| %>
+  <div class="mb-4">
+    <h3><%= "Categoria #{category_id} - #{category_name_by_id(category_id)}" %></h3>
+
+    <ul class="list-group">
+      <% answers.each_with_index do |answer, index| %>
+        <li class="list-group-item">
+          <strong><%= "#{index + 1}. #{answer.question.text}" %></strong><br>
+          <span><%= answer.response.presence || "Não respondida" %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= link_to 'Voltar para o início', root_path, class: 'btn btn-secondary mt-4' %>

@@ -1,0 +1,42 @@
+<div class="container">
+<h1>Perguntas Cadastradas</h1>
+
+<div class="mb-3 d-flex justify-content-between">
+  <div>
+    <%= link_to "Nova Importação CSV", new_import_questions_path, class: "btn btn-success me-2" %>
+    <%= link_to "Exportar CSV", export_csv_questions_path, class: "btn btn-outline-primary" %>
+  </div>
+
+  <%= button_to "Excluir TODAS as perguntas", destroy_all_questions_path, method: :delete, data: { confirm: "Tem certeza que deseja apagar TODAS as perguntas?" }, class: "btn btn-danger" %>
+</div>
+
+<table class="table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>Texto</th>
+      <th>Tipo</th>
+      <th>Categoria</th>
+      <th>Etapa</th>
+      <th>Tipo de Resposta</th>
+      <th>Opções</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= question.text %></td>
+        <td><%= question.question_type %></td>
+        <td><%= category_name_for(question) %></td>
+        <td><%= question.stage %></td>
+        <td><%= question.response_type %></td>
+        <td><%= question.options.join(", ") %></td>
+        <td>
+          <%= link_to "Editar", edit_question_path(question), class: "btn btn-sm btn-warning" %>
+          <%= link_to "Excluir", question_path(question), method: :delete, data: { confirm: "Deseja excluir esta pergunta?", turbo: true }, class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

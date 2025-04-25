@@ -11,9 +11,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, only: [] do
+  resources :questions do
     collection do
       get :export_csv
+      get :new_import
+      post :import
+      delete :destroy_all
     end
   end
 

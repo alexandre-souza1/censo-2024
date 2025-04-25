@@ -1,0 +1,41 @@
+<% @grouped_censo_questions.each_with_index do |(category_id, questions), index| %>
+  <h3 class="category-title">
+    <%= "#{index + 1} - #{category_name_by_id(category_id)}" %>
+  </h3>
+
+  <% questions.each_with_index do |question, index| %>
+    <div class="form-group">
+      <% mapped_category_id = question.category_id.to_i - 11 %>
+      <%= form.label "response_#{index + 1}", content_tag(:strong, "#{mapped_category_id}.#{question.stage} - #{question.text}") %>
+
+      <%= form.fields_for :answers, @survey.answers[index] do |answer_fields| %>
+        <%= answer_fields.hidden_field :question_id, value: question.id %>
+
+        <% case question.response_type %>
+          <% when 'radio' %>
+            <% question.options.each_with_index do |option, option_index| %>
+              <div class="form-check">
+                <%= answer_fields.radio_button :response, option, id: "response_#{index}_#{option_index}" %>
+                <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+              </div>
+            <% end %>
+
+          <% when 'dropdown' %>
+            <%= answer_fields.select :response, options_for_select(question.options), prompt: "Selecione...", rows: 4, style: "resize: none;" %>
+
+          <% when 'checkbox' %>
+            <% question.options.each_with_index do |option, option_index| %>
+              <div class="form-check">
+                <%= answer_fields.check_box :response, { multiple: true, checked: (@survey.answers[index].response.include?(option)) }, option, nil %>
+                <%= answer_fields.label "response_#{index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+              </div>
+            <% end %>
+          <% when 'textbox' %>
+            <div class="form-group">
+                <%= answer_fields.text_area :response, placeholder: "Digite sua resposta", class: "form-control", rows: 4, style: "resize: none;" %>
+            </div>
+          <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
