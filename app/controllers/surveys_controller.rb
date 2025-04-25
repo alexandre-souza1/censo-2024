@@ -32,7 +32,6 @@ class SurveysController < ApplicationController
     if @survey.save
       redirect_to survey_path(@survey), notice: "Pesquisa salva com sucesso!"
     else
-      logger.debug(@survey.errors.full_messages)
       flash.now[:alert] = "Erro ao salvar a pesquisa. Verifique os campos."
       render :new
     end

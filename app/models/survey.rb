@@ -6,16 +6,15 @@ class Survey < ApplicationRecord
 
   accepts_nested_attributes_for :answers, allow_destroy: true
 
-  # Validação para verificar se todas as respostas estão presentes
-  # validate :validate_all_responses
+  #Validação para verificar se todas as respostas estão presentes
+  validate :validate_all_responses
 
-  # # Método que verifica se todas as respostas foram preenchidas
-  # def validate_all_responses
-  #   logger.debug("Checking answers: #{answers.inspect}")
-  #   if answers.any? { |answer| answer.response.blank? }
-  #     errors.add(:answers, "Todas as respostas devem ser preenchidas")
-  #   end
-  # end
+  # Método que verifica se todas as respostas foram preenchidas
+  def validate_all_responses
+    if answers.any? { |answer| answer.response.blank? }
+      errors.add(:answers, "Todas as respostas devem ser preenchidas")
+    end
+  end
 
   def self.to_csv
     attributes = ["code", "recommendation_score", "general_feedback", "created_at"]
