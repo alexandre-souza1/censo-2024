@@ -22,16 +22,16 @@
 #  "NPS"
 # ]
 
-# categorias = [
-# "Estrutura Física",
-# "Condições De Trabalho",
-# "Higiene E Limpeza",
-# "Recursos E Equipamentos De Trabalho",
-# "Atendimento De Serviços Gerais",
-# "Serviços Gerais E Saúde Mental",
-# "Diversidade E Inclusão",
-# "NPS Censo"
-# ]
+categorias = [
+"Estrutura Física",
+"Condições De Trabalho",
+"Higiene E Limpeza",
+"Recursos E Equipamentos De Trabalho",
+"Atendimento De Serviços Gerais",
+"Serviços Gerais E Saúde Mental",
+"Diversidade E Inclusão",
+"NPS Censo"
+]
 
 categorias.each do |nome|
   Category.find_or_create_by!(name: nome)

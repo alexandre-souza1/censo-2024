@@ -78,7 +78,6 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: censo_2024_production
-  username: censo_2024
-  password: <%= ENV["CENSO_2024_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
