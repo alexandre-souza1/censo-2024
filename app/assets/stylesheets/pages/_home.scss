@@ -40,9 +40,12 @@
 /* Estilo do container da pesquisa */
 .container {
   background-color: #ffffff; /* Fundo branco para o formulário */
-  padding: 30px;
   border-radius: 8px; /* Bordas arredondadas */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.survey-box {
+  padding: 30px;
 }
 
 /* Estilos para o botão de envio */
