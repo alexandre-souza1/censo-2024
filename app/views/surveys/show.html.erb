@@ -1,6 +1,6 @@
 <div class="container mt-4">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 text-center mx-auto">
       <h3>Pesquisa <%= @survey.code %> finalizada!</h3>
       <h2>&nbsp;</h2>
       <br>
@@ -14,38 +14,7 @@
       <br>
       <br>
       <br>
-      <p style="font-size: 12px;">@ 2024 - Gente e Gestão</p>
+      <p style="font-size: 12px;">@ 2025 - Gente e Gestão</p>
     </div>
   </div>
 </div>
-
-<script>
-  // Lista de códigos válidos
-  const codigosValidos = [
-    "SFHUQ45P", "JXP74OI7", "OAGGRTOW", "1FG7FWAP", "JZS61MZ4", "XY48AWUH", "2CRJSRVH", "NETAM4GB", "QO9J4253",
-    "6QN4DG5X", "E1QNW4EV", "46XZH7ZM", "9VFD7G2L", "KAUXWR1B", "DHJIIQ1M", "ZVAHGPN7", "1GY7LEVX", "6T00ZB0U",
-    "7HTAQM5A", "TFS8YWY3", "R4D7KS8X", "TICA96I9", "2MKJJWZ8", "LC7F8L0Q", "AFNZ2VK0", "WSQ2ZYH5", "U44VHF9Z",
-    "H5K6CXRR", "HN0PMTMM", "5HHGCPDK", "4WHTP4OF", "884UMDF4", "U1386SLR", "4QA8W3BN", "MI881VMO", "A6MO9JCK",
-    "QOL0G6F3", "L4JLVW6S", "AJYHHPLN", "HBU0MQH6", "7P40IH8C", "RNS79X67", "LBVWFF85", "SODV98Q4", "1OLK48TV",
-    "BAEWXIGW", "LY9QYMAH", "BMPJSB7U", "QD4HSM8O", "HSL66WVQ", "EERHAH23", "TOGCKTWM", "EQFHUNVP", "DCNS7FC1",
-    "HBKZMXJB", "7YENANHJ", "0MX3NOEB", "06XH59UX", "IH9IR2XF", "MIP1MTZT", "6EBMU5FE", "9SW4TALM", "2UR8I1WA",
-    "08MGGA4W", "NWYHEV7M", "A7611WFT", "16ZZFZAH", "C7CKOFRR", "2C1CWS17", "NOA04FF1", "7LYM49ZI", "J1W3PBCT",
-    "RBVRQXKO", "HGPFFMV5", "V3TS7WO3", "ILI0ARCE", "7M470ELB", "BPQD4UHR", "HSRMNP4T", "7LMX2FEF", "4CUFUXS7",
-    "0MNOXTJ6", "9IGPXZ8Y", "KNOFWVF8", "VVKQF4PA", "SS10WYSF", "8ETRIHKA", "VDHL2KLB", "B87JHTZ6", "CRH5S82F",
-    "0MTYTB66", "XTDL8N86", "6NO9LS3S", "WZVSCQ9J", "5XHJM6TE", "Q7OW3B8P", "S940Z4UC", "FJ5EYO10"
-  ];
-
-  // Função para validar o código
-  function validarCodigo() {
-    const codigo = document.getElementById("code").value.toUpperCase(); // Obtém o valor do código, convertendo para maiúsculas
-    if (!codigosValidos.includes(codigo)) {
-      // Exibe a mensagem de erro e impede o envio do formulário
-      document.getElementById("erroCodigo").style.display = "block";
-      return false; // Impede o envio do formulário
-    } else {
-      // Esconde a mensagem de erro caso o código seja válido
-      document.getElementById("erroCodigo").style.display = "none";
-      return true; // Permite o envio do formulário
-    }
-  }
-</script>

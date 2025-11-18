@@ -19,6 +19,11 @@
   margin: 0;
 }
 
+.border-danger {
+  border-color: red !important;
+  background-color: #ffe6e6 !important;
+}
+
 
 /* Estilo para o título da categoria */
 .category-title {
@@ -38,9 +43,8 @@
 }
 
 /* Estilo do container da pesquisa */
-.container {
+.shadowed-box {
   background-color: #ffffff; /* Fundo branco para o formulário */
-  padding: 30px;
   border-radius: 8px; /* Bordas arredondadas */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
