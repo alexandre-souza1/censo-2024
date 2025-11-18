@@ -1,6 +1,8 @@
 require "roo"
 
 class SurveyCode < ApplicationRecord
+  belongs_to :survey_code, primary_key: :code, foreign_key: :code, optional: true
+  
   def self.import(file)
     # Abre o Excel automaticamente (.xlsx ou .xls)
     xlsx = Roo::Spreadsheet.open(file.path)
