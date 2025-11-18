@@ -1,0 +1,43 @@
+<h2>Importar códigos</h2>
+
+<%= form_with url: import_survey_codes_path, multipart: true, local: true do %>
+  <%= file_field_tag :file, accept: ".xlsx,.xls" %>
+  <%= submit_tag "Importar", class: "btn btn-primary" %>
+<% end %>
+
+<hr>
+
+<!-- BOTÃO DE APAGAR TUDO -->
+<div class="mb-3">
+  <%= button_to "Apagar todos os códigos", destroy_all_survey_codes_path,
+        method: :delete,
+        data: { confirm: "Tem certeza que deseja apagar TODOS os códigos cadastrados?" },
+        class: "btn btn-danger" %>
+</div>
+
+<h3>Códigos cadastrados</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Unidade</th>
+      <th>Colaborador</th>
+      <th>CPF</th>
+      <th>Status</th>
+      <th>Code</th>
+      <th>Usado?</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @survey_codes.each do |code| %>
+      <tr>
+        <td><%= code.unidade %></td>
+        <td><%= code.colaborador %></td>
+        <td><%= code.cpf %></td>
+        <td><%= code.status %></td>
+        <td><%= code.code %></td>
+        <td><%= code.used ? "Sim" : "Não" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

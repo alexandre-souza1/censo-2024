@@ -17,6 +17,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :survey_codes, only: [:index] do
+    collection do
+      post :import
+      delete :destroy_all
+    end
+  end
+
   # Rota para health check
   get "up" => "rails/health#show", as: :rails_health_check
 

@@ -2,16 +2,31 @@ require 'axlsx'
 
 class SurveysController < ApplicationController
   def new
-    # Inicializa a pesquisa com o código fornecido (se aplicável)
+    # Valida o código enviado e impede acesso se não existir
+    if params[:code].present?
+      @survey_code = SurveyCode.find_by(code: params[:code].upcase)
+
+      if @survey_code.nil?
+        redirect_to root_path, alert: "Código inválido!"
+        return
+      end
+
+      # (Opcional) Impedir reutilização:
+      # if @survey_code.used?
+      #   redirect_to root_path, alert: "Este código já foi utilizado."
+      #   return
+      # end
+    end
+
+    # Continua sua lógica normal
     @survey = Survey.new(code: params[:code])
 
-    # Carrega perguntas organizadas por categoria
     @engagement_questions = Question.where(category: 'Engagement')
     @censo_questions = Question.where(category: 'Censo')
 
-    # Cria respostas associadas para todas as perguntas
+    # Cria respostas para TODAS as perguntas
     Question.all.each do |question|
-      @survey.answers.build(question: question, response: "") # Resposta inicial em branco
+      @survey.answers.build(question: question, response: "")
     end
 
     # Agrupa e ordena perguntas por categoria
