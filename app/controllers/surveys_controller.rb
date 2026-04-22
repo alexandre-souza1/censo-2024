@@ -22,7 +22,7 @@ class SurveysController < ApplicationController
     @survey = Survey.new(code: params[:code])
 
     @engagement_questions = Question.where(category: 'Engagement')
-    @censo_questions = Question.where(category: 'Censo')
+    @censo_questions = Question.where(category: 'services')
 
     # Cria respostas para TODAS as perguntas
     Question.all.each do |question|
@@ -39,7 +39,7 @@ class SurveysController < ApplicationController
 
     # Recarrega perguntas organizadas por categoria para renderização em caso de erro
     @engagement_questions = Question.where(category: 'Engagement')
-    @censo_questions = Question.where(category: 'Censo')
+    @censo_questions = Question.where(category: 'services')
     @grouped_engagement_questions = group_and_sort_questions(@engagement_questions)
     @grouped_censo_questions = group_and_sort_questions(@censo_questions)
 

@@ -6,13 +6,13 @@
                   <!-- Cabeçalho da pesquisa -->
           <div class="row panel panel-default panel-heading col-lg-12" style="padding-top: 20px; padding-right: 17px; padding-left: 17px; z-index: 2; margin-bottom: 0px;">
             <div class="col-10">
-              <h4 class="margin-none"><strong>Pesquisa Engagement H2 & Censo 2025</strong></h4>
+              <h4 class="margin-none"><strong>PESQUISA ENGAGEMENT H1 & PESQUISA SERVIÇOS GERAIS - LOGÍSTICA 2026</strong></h4>
               <p><strong>Aplicação:</strong> anualmente para colaboradores administrativos, operacionais e lideranças ativos há mais de 01 (um) mês.</p>
             </div>
             <div class="col-lg-2 padding-none" style="border: 2px solid #1a1a1a;">
               <div class="padding-none">
                 <p class="text-center bgGreenTea" style="border-bottom: 2px solid #1a1a1a;"><strong>Vigência</strong></p>
-                <p class="text-center">27/10/2025</p>
+                <p class="text-center">01/04/2026</p>
               </div>
             </div>
           </div>
@@ -21,10 +21,14 @@
             <%= form.hidden_field :code %>
               <% answer_index = 0 %>
 
+              <!-- ===================== -->
+              <!-- ABA 1 - ENGAGEMENT -->
+              <!-- ===================== -->
+
               <div class="tab" data-meu-script-target="tab">
                 <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
                   <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
-                    <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT 2025</strong></h4>
+                    <h4 class="margin-none text-center"><strong>PESQUISA ENGAGEMENT H1 2026</strong></h4>
                     <br>
                   </div>
                   <div class="panel-body">
@@ -38,9 +42,9 @@
                     <br>
                   </div>
                   <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px; text-align: center;">
-                    <p>Participe da Pesquisa Engagement H2 2025!<br>
+                    <p>Participe da Pesquisa Engagement H1 2026!<br>
                       Olá, pessoal!<br>
-                      Estamos aplicando nossa Pesquisa Engagement H2 2025 e a sua participação é super importante pra nós!<br>
+                      Estamos aplicando nossa Pesquisa Engagment H1 2026 e nesse ano a pesquisa vem com 09 blocos e 30 perguntas, e a sua participação é super importante pra nós!<br>
                       A pesquisa é anônima e é muito importante que todos respondam com sinceridade.<br>
                       Sua opinião faz toda a diferença para melhorarmos juntos!<br>
                       Contamos com você!<br>
@@ -48,48 +52,55 @@
                     </p>
                   </div>
 
+                  <% @grouped_engagement_questions.each do |_, questions| %>
+                    <% questions.each do |question| %>
 
-                  <% @grouped_engagement_questions.each do |category_number, questions| %>
-                    <% questions.each_with_index do |question, index| %>
-                      <div class="form-group mt-2 border-bottom pb-3">
-                        <label for="response_<%= answer_index %>_0"><strong><%= question.text %></strong></label>
+                      <div class="form-group mt-3 border-bottom pb-3">
+                        <label><strong><%= question.text %></strong></label>
 
-                        <!-- Usar `fields_for` com respostas associadas -->
                         <%= form.fields_for :answers, @survey.answers[answer_index] do |answer_fields| %>
                           <%= answer_fields.hidden_field :question_id, value: question.id %>
-                          <% ["Concordo totalmente", "Concordo", "Discordo", "Discordo totalmente"].each_with_index do |option, option_index| %>
-                            <div class="form-check">
-                              <%= answer_fields.radio_button :response, option, id: "response_#{answer_fields.index}_#{option_index}"%>
-                              <%= answer_fields.label "response_#{answer_fields.index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+
+                          <% case question.response_type
+                            when 'likert_agreement', 'likert_satisfaction', 'radio' %>
+
+                            <% question.options.each_with_index do |option, i| %>
+                              <div class="form-check">
+                                <%= answer_fields.radio_button :response, option,
+                                  id: "q#{answer_index}_#{i}",
+                                  data: { option_index: i } %>
+                                <%= answer_fields.label "q#{answer_index}_#{i}", option, class: "form-check-label" %>
+                              </div>
+                            <% end %>
+
+                          <% when 'nps' %>
+                            <div class="d-flex flex-wrap gap-2 mt-2">
+                              <% (0..10).each do |n| %>
+                                <label class="btn btn-outline-secondary btn-sm">
+                                  <%= answer_fields.radio_button :response, n %> <%= n %>
+                                </label>
+                              <% end %>
                             </div>
+
+                          <% when 'text' %>
+                            <%= answer_fields.text_area :response, class: "form-control mt-2", rows: 4 %>
+
                           <% end %>
+
                         <% end %>
+
                         <% answer_index += 1 %>
                       </div>
+
                     <% end %>
                   <% end %>
+
                   <% if user_signed_in? %>
                     <!-- Botão para selecionar automaticamente todas as opções A -->
                     <div class="form-group mt-2 border-bottom pb-3">
                       <%= button_tag "Selecionar Todos A", type: 'button', class: 'btn btn-secondary', id: 'select_all_A', data: { action: 'meu-script#selectAllA' } %>
                     </div>
                   <% end %>
-
-                  <!-- Pergunta com Escala de 0 a 10 -->
-                  <div class="form-group mt-2 border-bottom pb-3">
-                    <%= form.label :recommendation_score, "1.29 - Em uma escala de 0 a 10, qual a probabilidade de você recomendar a empresa como um bom lugar para trabalhar?", class: "fw-bold" %>
-                    <div class="form-group mt-2 px-4">
-                      <%= form.select :recommendation_score, (0..10).to_a, {}, class: "form-select" %>
-                    </div>
-                  </div>
-
-                  <!-- Pergunta com Campo de Texto -->
-                  <div class="form-group mt-4 border-bottom pb-3">
-                    <%= form.label :general_feedback, "1.30 - Descreva aqui quais as suas percepções gerais sobre a empresa e ações que precisam ser tomadas para que este seja um bom lugar para se trabalhar.", class: "fw-bold" %>
-                    <div class="form-group mt-2 px-4">
-                      <%= form.text_area :general_feedback, rows: 5, class: "form-control" %>
-                    </div>
-                  </div>
 
                   <div class="mt-4 align-items-end d-flex justify-content-end pb-3">
                     <button type="button" class="btn btn-primary rounded" data-action="meu-script#nextTab">2ª Etapa</button>
@@ -100,18 +111,17 @@
             <div class="tab" data-meu-script-target="tab" style="display: none;">
               <div class="bg-white rounded" style="border: 2px solid #1a1a1a;">
                 <div class="panel-heading" style="background: #b0da98; border-bottom: 2px solid #1a1a1a; padding-bottom: 0px; padding-top: 20px;">
-                  <h4 class="margin-none text-center"><strong>CENSO 2025</strong></h4>
+                  <h4 class="margin-none text-center"><strong>PESQUISA SERVIÇOS GERAIS - LOGÍSTICA 2026</strong></h4>
                   <br>
                 </div>
                 <div class="panel-body">
                 <br>
                 <div class="panel-heading" style="background: #efefef; border-bottom: 2px solid #1a1a1a; border-top: 2px solid #1a1a1a; padding-bottom: 0px; font-size:12px; text-align: center">
-                  <p>Participe da Pesquisa Censo - Logística 2025!<br>
+                  <p>Participe da Pesquisa Serviços Gerais - Logística 2026!<br>
                     Olá, pessoal!<br>
-                    Nosso propósito é unir as pessoas por um mundo melhor. Temos o compromisso de contribuir para uma sociedade cada vez mais igualitária.<br>
+                    Estamos realizando uma pesquisa para entender a sua opinião sobre os serviços gerais da operação.<br>
                     Este censo nos ajudará a entender o panorama de nossos times em várias frentes: escolaridade, idade, gênero, raça, entre outras.<br>
-                    E, com os dados em mãos, formularemos juntos a melhor maneira de tornar nosso ambiente de trabalho cada vez mais diverso e inclusivo, onde toda nossa gente se sinta respeitada e capacitada para ser autêntica todos os dias.<br>
-                    Nossa pesquisa é 100% anônima e leva poucos minutos para responder.<br>
+                    Nossa pesquisa tem 7 blocos e 20 perguntas, é 100% anônima e leva poucos minutos para responder.<br>
                     Sua participação é muito importante! Responda com sinceridade para que possamos melhorar ainda mais o nosso ambiente de trabalho. Contamos com você!<br>
                     #JuntosPorUmaOperaçãoMelhor
                   </p>
@@ -127,36 +137,49 @@
                       <!-- Usar `fields_for` com respostas associadas -->
                       <%= form.fields_for :answers, @survey.answers[answer_index] do |answer_fields| %>
                         <%= answer_fields.hidden_field :question_id, value: question.id %> <!-- Associa resposta à pergunta -->
-
-                        <!-- Condicional para verificar o tipo de resposta -->
                         <% case question.response_type %>
-                        <% when 'radio' %>
-                          <!-- Exibe as opções como Radio Buttons -->
+                        <% when 'likert_agreement', 'likert_satisfaction', 'radio' %>
                           <% question.options.each_with_index do |option, option_index| %>
                             <div class="form-check">
-                              <%= answer_fields.radio_button :response, option, id: "response_#{answer_fields.index}_#{option_index}"%>
-                              <%= answer_fields.label "response_#{answer_fields.index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
+                              <%= answer_fields.radio_button :response, option, id: "response_#{answer_fields.index}_#{option_index}" %>
+                              <%= answer_fields.label "response_#{answer_fields.index}_#{option_index}", option, class: "form-check-label" %>
                             </div>
                           <% end %>
 
                         <% when 'dropdown' %>
-                          <!-- Exibe as opções como Dropdown (select) -->
-                          <div>
-                            <%= answer_fields.select :response, options_for_select(question.options), { prompt: "Selecione..." }, class: "form-select" %>
+                          <%= answer_fields.select :response, question.options, { prompt: "Selecione..." }, class: "form-select" %>
+
+                        <% when 'multiple' %>
+                          <% question.options.each do |option| %>
+                            <div class="form-check">
+                              <%= check_box_tag "survey[answers_attributes][#{answer_fields.index}][response][]", option %>
+                              <%= label_tag option %>
+                            </div>
+                          <% end %>
+
+                        <% when 'nps' %>
+                          <div class="d-flex gap-2 flex-wrap">
+                            <% (0..10).each do |n| %>
+                              <%= answer_fields.radio_button :response, n %>
+                              <%= n %>
+                            <% end %>
                           </div>
 
+                        <% when 'text' %>
+                          <%= answer_fields.text_area :response, class: "form-control", rows: 4 %>
 
-                          <% when 'multiple' %>
-                            <!-- Exibe as opções como Checkbox -->
-                            <% question.options.each_with_index do |option, option_index| %>
-                              <div class="form-check">
-                                <%= answer_fields.check_box :response, { multiple: true, checked: (@survey.answers[index].response.include?(option)) }, option, nil %>
-                                <%= answer_fields.label "response_#{answer_fields.index}_#{option_index}", "<strong>#{('A'.ord + option_index).chr}.</strong> #{option}".html_safe, class: "form-check-label" %>
-                              </div>
-                            <% end %>
+                        <% when 'ranking' %>
+                          <p class="text-muted">Ordene as opções (implementar drag futuramente)</p>
+                          <% question.options.each do |option| %>
+                            <div class="form-check">
+                              <%= check_box_tag "survey[answers_attributes][#{answer_fields.index}][response][]", option %>
+                              <%= label_tag option %>
+                            </div>
+                          <% end %>
 
                         <% else %>
-                          <p>Tipo de resposta desconhecido.</p>
+                          <p>Tipo de resposta desconhecido</p>
+
                         <% end %>
                       <% end %>
                       <% answer_index += 1 %>

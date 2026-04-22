@@ -83,210 +83,353 @@
 
 
 # --- PARTE 1: ENGAGEMENT (1.1 a 1.28) ---
+# engagement_questions = [
+#   "1.1 - Minha liderança imediata direta é acessível e aberta ao diálogo.",
+#   "1.2 - Confio nas decisões da minha liderança imediata.",
+#   "1.3 - Minha liderança imediata demonstra preocupação com meu bem-estar.",
+#   "1.4 - Minha liderança é justa e coerente.",
+#   "1.5 - As regras de segurança são sempre respeitadas, mesmo que o trabalho demore mais a ser realizado.",
+#   "1.6 - São disponibilizados EPIs e treinamentos para que eu realize meu trabalho com segurança.",
+#   "1.7 - Sou reconhecido(a) quando faço um bom trabalho.",
+#   "1.8 - Sinto que meu trabalho é importante e faz diferença para a empresa.",
+#   "1.9 - Tenho oportunidades reais de aprender e crescer profissionalmente.",
+#   "1.10 - Recebo treinamentos, orientações ou outras oportunidades de desenvolvimento na empresa.",
+#   "1.11 - Sei quais são minhas metas e responsabilidades.",
+#   "1.12 - Consigo manter um equilíbrio entre minha vida pessoal e trabalho.",
+#   "1.13 - Sempre consigo executar minhas atividades dentro do tempo previsto e raramente excedo a minha jornada de trabalho.",
+#   "1.14 - Consigo planejar minhas férias de forma que não haja prejuízo para mim ou para a empresa.",
+#   "1.15 - Sinto que minha remuneração é justa em relação ao meu trabalho e responsabilidades.",
+#   "1.16 - O programa de benefícios que recebo fazem diferença no meu dia a dia.",
+#   "1.17 - Sinto que posso contar com meus colegas.",
+#   "1.18 - Pretendo continuar trabalhando nesta empresa pelos próximos 12 meses.",
+#   "1.19 - Me identifico com a cultura da empresa em que trabalho.",
+#   "1.20 - As informações importantes chegam até mim de forma clara.",
+#   "1.21 - Sei a quem recorrer quando tenho dúvidas ou problemas.",
+#   "1.22 - Os times se comunicam de forma clara e ajudam uns aos outros.",
+#   "1.23 - Me sinto seguro(a) e respeitado(a) no ambiente de trabalho.",
+#   "1.24 - Sinto que posso falar sobre saúde mental sem medo de represálias.",
+#   "1.25 - Este é um lugar emocionalmente saudável para trabalhar.",
+#   "1.26 - O local onde trabalho é limpo, bem cuidado e confortável para realizar minhas atividades.",
+#   "1.27 - Tenho os equipamentos e materiais necessários, em boas condições, para realizar meu trabalho.",
+#   "1.28 - Quando preciso, consigo ajuda rápida para resolver problemas com estrutura ou equipamentos."
+# ]
+
+# engagement_questions.each do |question_text|
+#   Question.create!(
+#     text: question_text,
+#     category: "Engagement",
+#     response_type: "radio"
+#   )
+# end
+
+
+# # --- PARTE 2: CENSO (2.1 a 2.15) ---
+# censo_questions = [
+#   {
+#     text: "2.1 - Qual a sua escolaridade?",
+#     response_type: "radio",
+#     options: [
+#       "Pós Graduado(a)",
+#       "Superior Completo",
+#       "Superior Incompleto",
+#       "Ensino Médio Completo (antigo 2º Grau)",
+#       "Ensino Médio Incompleto (antigo 2º Grau)",
+#       "Ensino Fundamental Completo (antigo 1º Grau)",
+#       "Ensino Fundamental Incompleto (antigo 1º Grau)",
+#       "Nunca estudei"
+#     ]
+#   },
+#   {
+#     text: "2.2 - Você é uma pessoa com deficiência?",
+#     response_type: "radio",
+#     options: ["Sim", "Não"]
+#   },
+#   {
+#     text: "2.3 - Tem filhos ou dependentes socioafetivos? Se sim, quantos você tem?",
+#     response_type: "radio",
+#     options: ["Sim", "Não"]
+#   },
+#   {
+#     text: "2.4 - Onde você nasceu?",
+#     response_type: "dropdown",
+#     options: [
+#       "Acre (AC)", "Alagoas (AL)", "Amapá (AP)", "Amazonas (AM)", "Bahia (BA)", "Ceará (CE)",
+#       "Distrito Federal (DF)", "Espírito Santo (ES)", "Goiás (GO)", "Maranhão (MA)",
+#       "Mato Grosso (MT)", "Mato Grosso do Sul (MS)", "Minas Gerais (MG)", "Pará (PA)",
+#       "Paraíba (PB)", "Paraná (PR)", "Pernambuco (PE)", "Piauí (PI)", "Rio de Janeiro (RJ)",
+#       "Rio Grande do Norte (RN)", "Rio Grande do Sul (RS)", "Rondônia (RO)", "Roraima (RR)",
+#       "Santa Catarina (SC)", "São Paulo (SP)", "Sergipe (SE)", "Tocantins (TO)", "Estrangeiro"
+#     ]
+#   },
+#   {
+#     text: "2.5 - Você mora ou já morou na periferia?",
+#     response_type: "radio",
+#     options: ["Não", "Sim e ainda moro", "Sim, mas não moro mais"]
+#   },
+#   {
+#     text: "2.6 - Qual sua identidade de gênero?",
+#     response_type: "radio",
+#     options: [
+#       "Mulher Cis",
+#       "Homem Cis",
+#       "Mulher Trans",
+#       "Homem Trans",
+#       "Não-binário",
+#       "Outros",
+#       "Prefiro não responder"
+#     ]
+#   },
+#   {
+#     text: "2.7 - Qual a sua orientação sexual?",
+#     response_type: "radio",
+#     options: [
+#       "Heterossexual",
+#       "Homossexual",
+#       "Bissexual",
+#       "Assexual",
+#       "Pansexual",
+#       "Outro",
+#       "Prefiro não responder"
+#     ]
+#   },
+#   {
+#     text: "2.8 - Qual a sua cor/etnia?",
+#     response_type: "radio",
+#     options: [
+#       "Cor branca",
+#       "Cor amarela (de origem oriental)",
+#       "Cor parda",
+#       "Cor preta",
+#       "Etnia indígena",
+#       "Outro",
+#       "Prefiro não responder"
+#     ]
+#   },
+#   {
+#     text: "2.9 - Qual sua Renda Total Familiar?",
+#     response_type: "radio",
+#     options: [
+#       "Abaixo de 2 Salários Mínimos (R$ 3.036,00)",
+#       "De 2 a 4 Salários Mínimos (R$ 3.036,01 a R$ 6.072,00)",
+#       "De 4 a 10 Salários Mínimos (R$ 6.072,01 a R$ 15.180,00)",
+#       "De 10 a 20 Salários Mínimos (R$ 15.180,01 a R$ 30.360,00)",
+#       "Acima de 20 Salários Mínimos (R$ 30.360,01 ou mais)"
+#     ]
+#   },
+#   {
+#     text: "2.10 - Você possui outra fonte de renda?",
+#     response_type: "radio",
+#     options: ["Sim", "Não"]
+#   },
+#   {
+#     text: "2.11 - Você tem algum problema de saúde? (Pode marcar mais de uma opção)",
+#     response_type: "multiple",
+#     options: [
+#       "Não",
+#       "Sim, pressão alta",
+#       "Sim, colesterol alto",
+#       "Sim, diabetes",
+#       "Sim, obesidade",
+#       "Sim, perda auditiva",
+#       "Sim, coração",
+#       "Sim, de coluna",
+#       "Sim, psicológico",
+#       "Sim, dor/inflamação membros superiores",
+#       "Sim, dor/inflamação membros inferiores"
+#     ]
+#   },
+#   {
+#     text: "2.12 - Você sente ou sofreu algum tipo de discriminação e/ou preconceito no seu ambiente de trabalho?",
+#     response_type: "radio",
+#     options: ["Sim", "Não", "Prefiro não responder"]
+#   },
+#   {
+#     text: "2.13 - Qual(is) fator(es) você atribui como o(s) mais impactante(s) para o seu dia a dia?",
+#     response_type: "multiple",
+#     options: [
+#       "Pressões e prazos no trabalho",
+#       "Liderança e forma de trabalho",
+#       "Finanças pessoais",
+#       "Relacionamentos familiares e conjugais",
+#       "Outros (exemplifique)",
+#       "Prefiro não responder"
+#     ]
+#   },
+#   {
+#     text: "2.14 - Como você se locomove de casa para o trabalho?",
+#     response_type: "radio",
+#     options: [
+#       "Carro",
+#       "Moto",
+#       "Ônibus",
+#       "Metrô",
+#       "Bicicleta",
+#       "A pé",
+#       "Carona",
+#       "Outros"
+#     ]
+#   },
+#   {
+#     text: "2.15 - Quanto tempo você leva no deslocamento casa x trabalho?",
+#     response_type: "radio",
+#     options: [
+#       "Até 10min",
+#       "Até 20min",
+#       "Até 40min",
+#       "Até 60min",
+#       "Acima de 60min"
+#     ]
+#   }
+# ]
+
+# censo_questions.each do |q|
+#   Question.create!(
+#     text: q[:text],
+#     category: "Censo",
+#     response_type: q[:response_type],
+#     options: q[:options]
+#   )
+# end
+
+
+
+# //🧠 Engagement
+
+likert_agreement_options = [
+  "Concordo totalmente",
+  "Concordo",
+  "Nem concordo, nem discordo",
+  "Discordo",
+  "Discordo totalmente"
+]
+
 engagement_questions = [
-  "1.1 - Minha liderança imediata direta é acessível e aberta ao diálogo.",
-  "1.2 - Confio nas decisões da minha liderança imediata.",
-  "1.3 - Minha liderança imediata demonstra preocupação com meu bem-estar.",
-  "1.4 - Minha liderança é justa e coerente.",
-  "1.5 - As regras de segurança são sempre respeitadas, mesmo que o trabalho demore mais a ser realizado.",
-  "1.6 - São disponibilizados EPIs e treinamentos para que eu realize meu trabalho com segurança.",
-  "1.7 - Sou reconhecido(a) quando faço um bom trabalho.",
-  "1.8 - Sinto que meu trabalho é importante e faz diferença para a empresa.",
-  "1.9 - Tenho oportunidades reais de aprender e crescer profissionalmente.",
-  "1.10 - Recebo treinamentos, orientações ou outras oportunidades de desenvolvimento na empresa.",
-  "1.11 - Sei quais são minhas metas e responsabilidades.",
-  "1.12 - Consigo manter um equilíbrio entre minha vida pessoal e trabalho.",
-  "1.13 - Sempre consigo executar minhas atividades dentro do tempo previsto e raramente excedo a minha jornada de trabalho.",
-  "1.14 - Consigo planejar minhas férias de forma que não haja prejuízo para mim ou para a empresa.",
-  "1.15 - Sinto que minha remuneração é justa em relação ao meu trabalho e responsabilidades.",
-  "1.16 - O programa de benefícios que recebo fazem diferença no meu dia a dia.",
-  "1.17 - Sinto que posso contar com meus colegas.",
-  "1.18 - Pretendo continuar trabalhando nesta empresa pelos próximos 12 meses.",
-  "1.19 - Me identifico com a cultura da empresa em que trabalho.",
-  "1.20 - As informações importantes chegam até mim de forma clara.",
-  "1.21 - Sei a quem recorrer quando tenho dúvidas ou problemas.",
-  "1.22 - Os times se comunicam de forma clara e ajudam uns aos outros.",
-  "1.23 - Me sinto seguro(a) e respeitado(a) no ambiente de trabalho.",
-  "1.24 - Sinto que posso falar sobre saúde mental sem medo de represálias.",
-  "1.25 - Este é um lugar emocionalmente saudável para trabalhar.",
-  "1.26 - O local onde trabalho é limpo, bem cuidado e confortável para realizar minhas atividades.",
-  "1.27 - Tenho os equipamentos e materiais necessários, em boas condições, para realizar meu trabalho.",
-  "1.28 - Quando preciso, consigo ajuda rápida para resolver problemas com estrutura ou equipamentos."
+  "1.1 - Meu/minha líder comunica claramente o que é esperado de mim no trabalho.",
+  "1.2 - Meu/minha líder fornece feedbacks frequentes que contribuem para o meu desenvolvimento.",
+  "1.3 - Meu/minha líder trata as pessoas com respeito.",
+  "1.4 - Meu/minha líder demonstra, em suas atitudes, os princípios da empresa.",
+  "1.5 - Eu recomendaria meu/minha líder a outras pessoas.",
+  "1.6 - Meu/minha líder promove um ambiente de colaboração e trabalho em equipe.",
+  "1.7 - Meu/minha líder demonstra preocupação genuína com meu bem-estar.",
+  "1.8 - Meu/minha líder toma decisões de forma justa e coerente.",
+  "2.1 - Sou reconhecido(a) de forma justa quando entrego bons resultados.",
+  "3.1 - Recebo treinamentos adequados para executar bem minhas atividades.",
+  "3.2 - Eu conheço claramente minhas metas e como posso contribuir para alcançá-las.",
+  "3.3 - Recebo apoio quando ocorrem mudanças que impactam meu trabalho.",
+  "4.1 - Consigo manter um equilíbrio entre minha vida pessoal e trabalho.",
+  "4.2 - Minha carga de trabalho é adequada à minha jornada.",
+  "4.3 - Consigo programar minhas férias com antecedência e organização.",
+  "5.1 - Os colaboradores aqui são pagos adequadamente pelo serviço que fazem.",
+  "5.2 - Os meus benefícios atendem as minhas necessidades do dia a dia.",
+  "6.1 - Me identifico com a cultura da minha empresa.",
+  "6.2 - Sinto orgulho em trabalhar nesta empresa.",
+  "6.3 - Pretendo continuar trabalhando nesta empresa pelos próximos 12 meses.",
+  "7.1 - Me sinto bem informado através dos canais de comunicação da minha empresa.",
+  "7.2 - Percebi melhorias a partir da última pesquisa de clima.",
+  "8.1 - Me sinto seguro(a) para falar e pedir ajuda quando necessário.",
+  "8.2 - As pessoas são tratadas de forma justa e respeitosa.",
+  "9.1 - Este é um lugar emocionalmente saudável para trabalhar.",
+  "9.2 - A empresa oferece ambiente seguro para discutir saúde mental.",
+  "9.3 - Posso falar sobre problemas como ansiedade ou depressão.",
+  "9.4 - Recebi feedbacks que incluíram saúde mental.",
+  "9.5 - A cultura promove a importância da saúde mental."
 ]
 
-engagement_questions.each do |question_text|
+engagement_questions.each do |text|
   Question.create!(
-    text: question_text,
+    text: text,
     category: "Engagement",
-    response_type: "radio"
+    survey_type: "Engagement",
+    response_type: "likert_agreement",
+    options: likert_agreement_options
   )
 end
 
+# NPS
+Question.create!(
+  text: "10.1 - Em uma escala de 0 a 10, qual a probabilidade de recomendar a empresa?",
+  category: "Engagement",
+  survey_type: "Engagement",
+  response_type: "nps"
+)
 
-# --- PARTE 2: CENSO (2.1 a 2.15) ---
-censo_questions = [
-  {
-    text: "2.1 - Qual a sua escolaridade?",
-    response_type: "radio",
-    options: [
-      "Pós Graduado(a)",
-      "Superior Completo",
-      "Superior Incompleto",
-      "Ensino Médio Completo (antigo 2º Grau)",
-      "Ensino Médio Incompleto (antigo 2º Grau)",
-      "Ensino Fundamental Completo (antigo 1º Grau)",
-      "Ensino Fundamental Incompleto (antigo 1º Grau)",
-      "Nunca estudei"
-    ]
-  },
-  {
-    text: "2.2 - Você é uma pessoa com deficiência?",
-    response_type: "radio",
-    options: ["Sim", "Não"]
-  },
-  {
-    text: "2.3 - Tem filhos ou dependentes socioafetivos? Se sim, quantos você tem?",
-    response_type: "radio",
-    options: ["Sim", "Não"]
-  },
-  {
-    text: "2.4 - Onde você nasceu?",
-    response_type: "dropdown",
-    options: [
-      "Acre (AC)", "Alagoas (AL)", "Amapá (AP)", "Amazonas (AM)", "Bahia (BA)", "Ceará (CE)",
-      "Distrito Federal (DF)", "Espírito Santo (ES)", "Goiás (GO)", "Maranhão (MA)",
-      "Mato Grosso (MT)", "Mato Grosso do Sul (MS)", "Minas Gerais (MG)", "Pará (PA)",
-      "Paraíba (PB)", "Paraná (PR)", "Pernambuco (PE)", "Piauí (PI)", "Rio de Janeiro (RJ)",
-      "Rio Grande do Norte (RN)", "Rio Grande do Sul (RS)", "Rondônia (RO)", "Roraima (RR)",
-      "Santa Catarina (SC)", "São Paulo (SP)", "Sergipe (SE)", "Tocantins (TO)", "Estrangeiro"
-    ]
-  },
-  {
-    text: "2.5 - Você mora ou já morou na periferia?",
-    response_type: "radio",
-    options: ["Não", "Sim e ainda moro", "Sim, mas não moro mais"]
-  },
-  {
-    text: "2.6 - Qual sua identidade de gênero?",
-    response_type: "radio",
-    options: [
-      "Mulher Cis",
-      "Homem Cis",
-      "Mulher Trans",
-      "Homem Trans",
-      "Não-binário",
-      "Outros",
-      "Prefiro não responder"
-    ]
-  },
-  {
-    text: "2.7 - Qual a sua orientação sexual?",
-    response_type: "radio",
-    options: [
-      "Heterossexual",
-      "Homossexual",
-      "Bissexual",
-      "Assexual",
-      "Pansexual",
-      "Outro",
-      "Prefiro não responder"
-    ]
-  },
-  {
-    text: "2.8 - Qual a sua cor/etnia?",
-    response_type: "radio",
-    options: [
-      "Cor branca",
-      "Cor amarela (de origem oriental)",
-      "Cor parda",
-      "Cor preta",
-      "Etnia indígena",
-      "Outro",
-      "Prefiro não responder"
-    ]
-  },
-  {
-    text: "2.9 - Qual sua Renda Total Familiar?",
-    response_type: "radio",
-    options: [
-      "Abaixo de 2 Salários Mínimos (R$ 3.036,00)",
-      "De 2 a 4 Salários Mínimos (R$ 3.036,01 a R$ 6.072,00)",
-      "De 4 a 10 Salários Mínimos (R$ 6.072,01 a R$ 15.180,00)",
-      "De 10 a 20 Salários Mínimos (R$ 15.180,01 a R$ 30.360,00)",
-      "Acima de 20 Salários Mínimos (R$ 30.360,01 ou mais)"
-    ]
-  },
-  {
-    text: "2.10 - Você possui outra fonte de renda?",
-    response_type: "radio",
-    options: ["Sim", "Não"]
-  },
-  {
-    text: "2.11 - Você tem algum problema de saúde? (Pode marcar mais de uma opção)",
-    response_type: "multiple",
-    options: [
-      "Não",
-      "Sim, pressão alta",
-      "Sim, colesterol alto",
-      "Sim, diabetes",
-      "Sim, obesidade",
-      "Sim, perda auditiva",
-      "Sim, coração",
-      "Sim, de coluna",
-      "Sim, psicológico",
-      "Sim, dor/inflamação membros superiores",
-      "Sim, dor/inflamação membros inferiores"
-    ]
-  },
-  {
-    text: "2.12 - Você sente ou sofreu algum tipo de discriminação e/ou preconceito no seu ambiente de trabalho?",
-    response_type: "radio",
-    options: ["Sim", "Não", "Prefiro não responder"]
-  },
-  {
-    text: "2.13 - Qual(is) fator(es) você atribui como o(s) mais impactante(s) para o seu dia a dia?",
-    response_type: "multiple",
-    options: [
-      "Pressões e prazos no trabalho",
-      "Liderança e forma de trabalho",
-      "Finanças pessoais",
-      "Relacionamentos familiares e conjugais",
-      "Outros (exemplifique)",
-      "Prefiro não responder"
-    ]
-  },
-  {
-    text: "2.14 - Como você se locomove de casa para o trabalho?",
-    response_type: "radio",
-    options: [
-      "Carro",
-      "Moto",
-      "Ônibus",
-      "Metrô",
-      "Bicicleta",
-      "A pé",
-      "Carona",
-      "Outros"
-    ]
-  },
-  {
-    text: "2.15 - Quanto tempo você leva no deslocamento casa x trabalho?",
-    response_type: "radio",
-    options: [
-      "Até 10min",
-      "Até 20min",
-      "Até 40min",
-      "Até 60min",
-      "Acima de 60min"
-    ]
-  }
+# Aberta
+Question.create!(
+  text: "11.1 - Descreva suas percepções gerais e sugestões.",
+  category: "Engagement",
+  survey_type: "Engagement",
+  response_type: "text"
+)
+
+
+# //🏭 Serviços Gerais
+
+likert_satisfaction_options = [
+  "Muito satisfeito",
+  "Satisfeito",
+  "Pouco satisfeito",
+  "Insatisfeito",
+  "Muito insatisfeito"
 ]
 
-censo_questions.each do |q|
+servicos_questions = [
+  "1.1 - Manutenção e conservação dos prédios",
+  "1.2 - Condição das áreas comuns",
+  "1.3 - Acessibilidade para PCD",
+  "2.1 - Ruído no ambiente de trabalho",
+  "2.2 - Iluminação",
+  "2.3 - Temperatura",
+  "3.1 - Limpeza de banheiros e vestiários",
+  "3.2 - Reposição de itens essenciais",
+  "3.3 - Limpeza geral",
+  "3.4 - Coleta de lixo",
+  "4.1 - Equipamentos e ferramentas",
+  "4.2 - EPIs",
+  "4.3 - Mesas e cadeiras",
+  "4.4 - Bebedouros",
+  "5.1 - Comunicação com manutenção",
+  "5.2 - Manutenção preventiva",
+  "6.1 - Ergonomia e conforto"
+]
+
+servicos_questions.each do |text|
   Question.create!(
-    text: q[:text],
-    category: "Censo",
-    response_type: q[:response_type],
-    options: q[:options]
+    text: text,
+    category: "services",
+    survey_type: "services",
+    response_type: "likert_satisfaction",
+    options: likert_satisfaction_options
   )
 end
+
+# Ranking
+Question.create!(
+  text: "7.1 - Classifique por ordem de importância (Limpeza, Manutenção, Equipamentos, EPIs, Acessibilidade, Ergonomia)",
+  category: "services",
+  survey_type: "services",
+  response_type: "ranking",
+  options: [
+    "Limpeza",
+    "Manutenção",
+    "Equipamentos",
+    "EPIs",
+    "Acessibilidade",
+    "Ergonomia"
+  ]
+)
+
+# NPS
+Question.create!(
+  text: "8.1 - De 0 a 10, o quanto você recomendaria os serviços gerais?",
+  category: "services",
+  survey_type: "services",
+  response_type: "nps"
+)
+
+# Aberta
+Question.create!(
+  text: "9.1 - Sugestões para melhoria dos serviços gerais",
+  category: "services",
+  survey_type: "services",
+  response_type: "text"
+)

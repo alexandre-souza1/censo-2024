@@ -84,10 +84,23 @@ export default class extends Controller {
   }
 
   selectAllA() {
-    document.querySelectorAll('input[id^="response_"]').forEach(radioButton => {
-      if (radioButton.id.endsWith('_0')) {
-        radioButton.checked = true
+    const radios = this.element.querySelectorAll('input[type="radio"]')
+
+    const grouped = {}
+
+    radios.forEach(radio => {
+      const name = radio.name
+
+      if (!grouped[name]) {
+        grouped[name] = []
       }
+
+      grouped[name].push(radio)
+    })
+
+    Object.values(grouped).forEach(group => {
+      const first = group.find(r => r.dataset.optionIndex === "0")
+      if (first) first.checked = true
     })
   }
 }
