@@ -169,13 +169,24 @@
                           <%= answer_fields.text_area :response, class: "form-control", rows: 4 %>
 
                         <% when 'ranking' %>
-                          <p class="text-muted">Ordene as opções (implementar drag futuramente)</p>
-                          <% question.options.each do |option| %>
-                            <div class="form-check">
-                              <%= check_box_tag "survey[answers_attributes][#{answer_fields.index}][response][]", option %>
-                              <%= label_tag option %>
-                            </div>
-                          <% end %>
+                          <p class="text-muted">Classifique por ordem de importância (1 = mais importante)</p>
+
+                          <div data-controller="ranking">
+                            <% question.options.each do |option| %>
+                              <div class="d-flex align-items-center mb-2 gap-2">
+                                <span style="min-width: 150px;"><%= option %></span>
+
+                                <%= select_tag "survey[answers_attributes][#{answer_fields.index}][response][#{option}]",
+                                  options_for_select((1..question.options.size).to_a),
+                                  prompt: "Posição",
+                                  class: "form-select w-auto",
+                                  data: {
+                                    ranking_target: "select",
+                                    action: "change->ranking#update"
+                                  } %>
+                              </div>
+                            <% end %>
+                          </div>
 
                         <% else %>
                           <p>Tipo de resposta desconhecido</p>

@@ -43,9 +43,6 @@ class SurveysController < ApplicationController
     @grouped_engagement_questions = group_and_sort_questions(@engagement_questions)
     @grouped_censo_questions = group_and_sort_questions(@censo_questions)
 
-        # Certifique-se de formatar as respostas múltiplas como string separada por '-'
-        format_multiple_responses(@survey.answers)
-
     if @survey.save
       redirect_to survey_path(@survey), notice: "Pesquisa salva com sucesso!"
     else
@@ -62,30 +59,32 @@ class SurveysController < ApplicationController
     wb = p.workbook
     sheet = wb.add_worksheet(name: "Pesquisas")
 
-    # Cabeçalhos (agora inclui Nome e Unidade)
-    question_headers = Question.order(:id).pluck(:id, :text).map { |id, text| "Q#{id}: #{text}" }
-    headers = ["Código", "Nome", "Unidade", "Score de Recomendação", "Feedback Geral", "Data de Criação"] + question_headers
+    # Cabeçalhos
+    question_headers = Question.order(:id).map { |q| "Q#{q.id}: #{q.text}" }
+
+    headers = ["Código", "Nome", "Unidade", "Data de Criação"] + question_headers
     sheet.add_row headers
 
-    Survey.all.each do |survey|
-      # Busca o registro do survey_code associado
+    Survey.includes(:answers).find_each do |survey|
       survey_code = SurveyCode.find_by(code: survey.code)
 
       colaborador = survey_code&.colaborador || "Não encontrado"
       unidade = survey_code&.unidade || "Não encontrada"
 
-      created_at_brasilia = survey.created_at.in_time_zone('America/Sao_Paulo').strftime('%Y-%m-%d %H:%M:%S')
+      created_at = survey.created_at
+                        .in_time_zone('America/Sao_Paulo')
+                        .strftime('%Y-%m-%d %H:%M:%S')
 
       survey_data = [
         survey.code,
         colaborador,
         unidade,
-        survey.recommendation_score,
-        survey.general_feedback,
-        created_at_brasilia
+        created_at
       ]
 
-      answers_data = survey.answers.order(:question_id).map(&:response)
+    answers_data = survey.answers.order(:question_id).map do |answer|
+      format_response(answer.response)
+    end
 
       sheet.add_row survey_data + answers_data
     end
@@ -94,7 +93,6 @@ class SurveysController < ApplicationController
       filename: "surveys-#{Date.today}.xlsx",
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-
 
 
   def export_csv
@@ -110,7 +108,16 @@ class SurveysController < ApplicationController
   private
 
   def survey_params
-    params.require(:survey).to_unsafe_h
+    params.require(:survey).permit(
+      :code,
+      answers_attributes: [
+        :id,
+        :question_id,
+        :response,
+        { response: [] },
+        { response: {} }
+      ]
+    )
   end
 
 
@@ -133,11 +140,36 @@ class SurveysController < ApplicationController
     end.to_h # Retorna como hash ordenado
   end
 
-  def format_multiple_responses(answers)
-    answers.each do |answer|
-      if answer.response.is_a?(Array)
-        answer.response = answer.response.join('- ')
+  def format_response(response)
+    return "" if response.nil?
+
+    # 👇 tenta converter string em hash
+    if response.is_a?(String) && response.include?("=>")
+      begin
+        response = eval(response) # ⚠️ controlado (dados internos)
+      rescue
+        return response
       end
+    end
+
+    case response
+    when String
+      response
+
+    when Integer
+      response.to_s
+
+    when Array
+      response.join(", ")
+
+    when Hash
+      response
+        .sort_by { |_, v| v.to_i }
+        .map { |k, v| "#{v}º #{k}" }
+        .join(" | ")
+
+    else
+      response.to_s
     end
   end
 end

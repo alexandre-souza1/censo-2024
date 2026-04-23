@@ -5,39 +5,76 @@ class Survey < ApplicationRecord
   has_many :questions, through: :answers
 
   accepts_nested_attributes_for :answers
-  validates :code, :recommendation_score, :general_feedback, presence: true
 
-  # Validação para verificar se todas as respostas estão presentes
+  validates :code, presence: true
+
   validate :validate_all_responses
 
-  # Método que verifica se todas as respostas foram preenchidas
+  # =========================
+  # VALIDAÇÃO DAS RESPOSTAS
+  # =========================
   def validate_all_responses
-    logger.debug("Checking answers: #{answers.inspect}")
-    if answers.any? { |answer| answer.response.blank? }
+    if answers.any? { |answer| response_blank?(answer.response) }
       errors.add(:answers, "Todas as respostas devem ser preenchidas")
     end
   end
 
+  def response_blank?(response)
+    return true if response.nil?
+
+    if response.is_a?(String)
+      response.strip.empty?
+    elsif response.is_a?(Array)
+      response.empty?
+    elsif response.is_a?(Hash)
+      response.values.reject(&:blank?).empty?
+    else
+      false
+    end
+  end
+
+  # =========================
+  # EXPORTAÇÃO CSV
+  # =========================
   def self.to_csv
-    attributes = ["code", "recommendation_score", "general_feedback", "created_at"]
+    attributes = ["code", "created_at"]
 
     CSV.generate(headers: true, encoding: 'UTF-8') do |csv|
-      # Adicionando as perguntas com a codificação correta
-      csv << attributes + Question.pluck(:id, :text).map { |id, text| "Q#{id}: #{text.force_encoding('UTF-8')}" }
+      csv << attributes + Question.order(:id).map { |q| "Q#{q.id}: #{q.text}" }
 
       all.each do |survey|
-        # Converte 'created_at' para o horário de Brasília (GMT-3) e formata a data
-        created_at_brasilia = survey.created_at.in_time_zone('Brasilia').strftime('%Y-%m-%d %H:%M:%S')
+        created_at_brasilia = survey.created_at
+                                      .in_time_zone('Brasilia')
+                                      .strftime('%Y-%m-%d %H:%M:%S')
 
-        # Prepara os dados da pesquisa, incluindo o created_at convertido
-        survey_data = attributes.map { |attr| attr == 'created_at' ? created_at_brasilia : survey.send(attr) }
+        survey_data = [survey.code, created_at_brasilia]
 
-        # Prepara as respostas das perguntas
-        answers_data = survey.answers.order(:question_id).map { |answer| answer.response.force_encoding('UTF-8') }
+        answers_data = survey.answers
+                             .order(:question_id)
+                             .map { |answer| format_response(answer.response) }
 
-        # Adiciona a linha no CSV
         csv << survey_data + answers_data
       end
+    end
+  end
+
+  # =========================
+  # FORMATAÇÃO DAS RESPOSTAS
+  # =========================
+  def self.format_response(response)
+    case response
+    when String
+      response
+    when Integer
+      response.to_s
+    when Array
+      response.join(", ")
+    when Hash
+      response.sort_by { |_, v| v.to_i }
+              .map { |k, v| "#{v}-#{k}" }
+              .join(" | ")
+    else
+      response.to_s
     end
   end
 end
